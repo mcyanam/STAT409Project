@@ -1,4 +1,4 @@
-Flue depth,Frequency,Cut-up height,diam toe,Acoustic Intensity,Partials 1,Partials 2,Partials 3,Partials 4,Partials 5,Partials 6,Partials 7,Partials 8
+flueDepth,frequency,cutUpHeight,diameterToe,acousticIntensity,partial1,partial2,partial3,partial4,partial5,partial6,partial7,partial8
 3.50E-04,196.00,1.05E-02,7.00E-03,73.00,99.00,61.00,87.00,37.00,44.00,0.00,5.00,0.00
 3.50E-04,196.00,1.05E-02,8.50E-03,90.00,70.00,99.00,73.00,18.00,13.00,0.00,5.00,0.00
 1.06E-03,146.80,1.20E-02,7.00E-03,65.00,91.00,43.00,99.00,52.00,69.00,40.00,50.00,19.00
