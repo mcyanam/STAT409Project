@@ -1,0 +1,41 @@
+% psu-logos.sty
+% Define macros for PSU logos
+
+\ProvidesPackage{psu-logos}
+
+% Load necessary packages
+\usepackage{graphicx}
+
+% Define paths to logo folders with shorter variable names
+\def\PSUPath{Logos/PSU/PNG}
+\def\BAPPath{Logos/BusinessAccelerator}
+\def\CEPPath{Logos/CenterforEntrepreneurship}
+\def\CEPEPath{Logos/CenterforExecutiveandProfessionalEducaiton}
+\def\CIMRPath{Logos/CenterforInternshipMentoringandResearch}
+\def\CREPath{Logos/CenterforRealEstate}
+\def\CLASPath{Logos/CollegeOfLiberalArtandSciences}
+\def\CUPAPath{Logos/CollegeOfUrbanAndPublicAffairs}
+\def\COEPath{Logos/CollegeofEducation}
+\def\COTAPath{Logos/CollegeoftheArts}
+\def\ISSPath{Logos/InstituteforSustainableSolutions}
+\def\LibraryPath{Logos/Library}
+\def\MCECSPath{Logos/MaseehCollege}
+\def\OSHUPath{Logos/OHSU-PSUSchoolofPublicHealth}
+\def\PDCPath{Logos/ProfessionalDevelopmentCenter}
+\def\SBAPath{Logos/SchoolOfBusinessAdministration}
+\def\SESPath{Logos/SchoolOfExtendedStudies}
+\def\SFPAPath{Logos/SchoolOfFineAndPerformingArts}
+\def\SSWPath{Logos/SchoolOfSocialWork}
+\def\NPIPath{Logos/TheNonprofitInstitute}
+\def\UHCPath{Logos/UniversityHonorsCollege}
+
+% TODO: Add more logos
+% Define the commands to include logos with specified height
+\newcommand{\PSULogomarkGreen}[1]{\includegraphics[height=#1]{\PSUPath/PSU_Logomark/logomark_green.png}}
+\newcommand{\PSULogomarkWhite}[1]{\includegraphics[height=#1]{\PSUPath/PSU_Logomark/logomark_white.png}}
+\newcommand{\PSULogoHorizontal}[1]{\includegraphics[height=#1]{\PSUPath/PSU_Logo_Horizontal/PSU_logo_transparent.png}}
+\newcommand{\PSULogoHorizontalAccent}[1]{\includegraphics[height=#1]{\PSUPath/PSU_Logo_Horizontal/PSU_logo_accent_transparent.png}}
+\newcommand{\PSULogoHorizontalWhite}[1]{\includegraphics[height=#1]{\PSUPath/PSU_Logo_Horizontal/PSU_logo_white_transparent.png}}
+\newcommand{\PSULogoHorizontalBlack}[1]{\includegraphics[height=#1]{\PSUPath/PSU_Logo_Horizontal/PSU_logo_black_transparent.png}}
+\newcommand{\CLASLogoColor}[1]{\includegraphics[height=#1]{\CLASPath/psu_clas.png}}
+\newcommand{\CLASLogoBW}[1]{\includegraphics[height=#1]{\CLASPath/psu_clas_bw.eps}}

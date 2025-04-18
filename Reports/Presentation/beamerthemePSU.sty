@@ -1,0 +1,149 @@
+% beamerthemePSU.sty
+% Beamer theme for Portland State University
+
+\ProvidesPackage{beamerthemePSU}
+
+% Load essential packages
+\usepackage{graphicx}
+\usepackage{pgf}
+\usepackage{pgfpages}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{pgfkeys}
+\usepackage{tikz}
+
+% Load PSU colors and logos
+\usepackage{psu-colors}
+\usepackage{psu-logos}
+
+\pgfplotsset{compat=1.18}
+
+% Define sizes
+\def\LogoSize{1cm}
+
+% Set font to Acumin Pro
+\usefonttheme{professionalfonts}
+\usefonttheme{serif}
+\usepackage{fontspec}
+\setmainfont{Acumin Pro}[
+    UprightFont=*-Regular,
+    BoldFont=*-Bold,
+    ItalicFont=*-Italic,
+]
+
+% Set the font theme
+% \usefonttheme{Acumin} % TODO: This doesn't work
+\setbeamerfont{title}{size=\LARGE, series=\bfseries}
+\setbeamerfont{subtitle}{size=\large, series=\bfseries}
+\setbeamerfont{author}{size=\large}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{date}{size=\small}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{section in toc}{series=\bfseries}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Bullet points (itemize) color and style
+\setbeamercolor{itemize item}{fg=psuForestGreen}
+\setbeamercolor{itemize subitem}{fg=psuForestGreen}
+\setbeamercolor{itemize subsubitem}{fg=psuForestGreen}
+
+% Block colors
+\setbeamercolor{block title}{fg=white,bg=psuStone}
+\setbeamercolor{block body}{fg=black,bg=psuStone!10}
+
+% Alert block colors
+\setbeamercolor{block title alerted}{fg=white,bg=psuOrange}
+\setbeamercolor{block body alerted}{fg=black,bg=psuOrange!10}
+
+% Table of contents styling
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamercolor{section in toc}{fg=psuForestGreen}
+\setbeamercolor{subsection in toc}{fg=psuForestGreen}
+\setbeamercolor{subsubsection in toc}{fg=psuForestGreen}
+
+% Optional: Add dots between title and page number
+\setbeamertemplate{section in toc}{\inserttocsectionnumber.~\inserttocsection\par}
+\setbeamertemplate{subsection in toc}{\leavevmode\leftskip=1.5em\inserttocsubsection\par}
+\setbeamertemplate{subsubsection in toc}{\leavevmode\leftskip=3em\inserttocsection\par}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title page
+
+% Define the title page template with options for color and logos
+\defbeamertemplate*{title page}{psu}[1][
+    titlefg=psuElectricGreen,
+    leftlogo=\PSULogoHorizontalWhite{\LogoSize},
+    centerlogo={},
+    rightlogo={}
+]{
+    \vspace*{1cm}
+    \raggedright
+    {\usebeamerfont{title}\color{\pgfkeysvalueof{/title page/titlefg}}\textit{\inserttitle}}\par
+    \vskip0.5em
+    {\usebeamerfont{subtitle}\color{\pgfkeysvalueof{/title page/titlefg}}\insertsubtitle}\par
+    \vskip1em
+    {\usebeamerfont{author}\color{\pgfkeysvalueof{/title page/titlefg}}\insertauthor}\par
+    \vskip0.5em
+    {\usebeamerfont{institute}\color{\pgfkeysvalueof{/title page/titlefg}}\insertinstitute}\par
+    \vskip0.5em
+    {\usebeamerfont{date}\color{\pgfkeysvalueof{/title page/titlefg}}\insertdate}\par
+    \vskip1em
+    \pgfkeysvalueof{/title page/leftlogo}
+    \hfill\hspace{0.5cm} \pgfkeysvalueof{/title page/centerlogo}\hspace{0.5cm}
+    \hfill\pgfkeysvalueof{/title page/rightlogo}
+}
+
+% Define key handlers for the title page template options
+\pgfkeys{
+    /title page/.is family, /title page,
+    titlefg/.initial=psuElectricGreen,
+    leftlogo/.initial=\PSULogoHorizontalWhite{\LogoSize},
+    centerlogo/.initial={},
+    rightlogo/.initial={}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Set the frame title
+\defbeamertemplate*{frametitle}{psu}[1][
+    title=psuForestGreen,
+]{
+    \nointerlineskip
+    \vskip0.5em
+    \begin{centering}
+        \usebeamerfont{frametitle}\color{\pgfkeysvalueof{/frametitle/title}}\insertframetitle\par
+    \end{centering}
+    \vskip0.25em
+    {\color{\pgfkeysvalueof{/frametitle/title}}\hrule height 1pt width\textwidth}
+    \vskip0.25em
+    \nointerlineskip
+}
+
+% Define key handlers for the frame title template options
+\pgfkeys{
+    /frametitle/.is family, /frametitle,
+    title/.initial=psuForestGreen
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Footer configuration in the .sty file
+\setbeamertemplate{footline}{%
+    \vskip-1ex
+    \begin{beamercolorbox}[wd=\paperwidth,ht=0.2pt,dp=0pt]{separation line}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=3ex,dp=1.5ex,leftskip=1em,rightskip=1em,sep=0.5ex]{footline}
+        \usebeamerfont{footline}%
+        {\tiny\strut\insertshorttitle
+        \hfill \insertshortinstitute
+        \hfill \insertshortauthor
+        \hfill \insertframenumber/\inserttotalframenumber\hspace*{1em}}
+    \end{beamercolorbox}
+}
+
+% Color and style definitions
+\setbeamercolor{footline}{fg=white,bg=psuForestGreen}  % White text on PSU green background
+\setbeamercolor{separation line}{fg=psuForestGreen,bg=psuForestGreen}
+\setbeamerfont{footline}{size=\tiny}
+
+% Add extra space for navigation symbols if needed
+\setbeamertemplate{navigation symbols}{\hspace{1em}}  % Adds padding around navigation symbols

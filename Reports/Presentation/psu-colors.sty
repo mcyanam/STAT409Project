@@ -1,0 +1,62 @@
+% psu-colors.sty
+% Define PSU brand colors for LaTeX Beamer
+
+\ProvidesPackage{psu-colors}
+
+% Load necessary packages
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+% Define PSU brand colors (example using RGB values)
+%\definecolor{psuExample}{RGB}{0, 88, 65}
+
+% Primary palette
+\definecolor{psuGreen}{RGB}{109, 141, 36}
+\definecolor{psuElectricGreen}{RGB}{198, 211, 0}
+\definecolor{psuForestGreen}{RGB}{33, 57, 33}
+\definecolor{psuWhite}{RGB}{255, 255, 255}
+\definecolor{psuBlack}{RGB}{0, 0, 0}
+
+% Secondary palette
+\definecolor{psuRed}{RGB}{230, 73, 39}
+\definecolor{psuSand}{RGB}{232, 211, 162}
+\definecolor{psuBlue}{RGB}{0, 138, 193}
+\definecolor{psuLightBlue}{RGB}{165, 223, 249}
+\definecolor{psuStone}{RGB}{138, 138, 103}
+\definecolor{psuYellow}{RGB}{255, 194, 14}
+\definecolor{psuOrange}{RGB}{246, 139, 31}
+\definecolor{psuPurple}{RGB}{101, 3, 96}
+
+% Showcase the colors
+% Usage: \showPSUColorsPrimary
+% Output: Table with names and primary colors
+\newcommand{\showPSUColorsPrimary}{
+    \begin{table}
+        \centering
+        \begin{tabular}{c|c}
+            \rowcolor{psuGreen} \textcolor{psuWhite}{psuGreen} & \textcolor{psuBlack}{RGB: 109, 141, 36} \\
+            \rowcolor{psuElectricGreen} \textcolor{psuBlack}{psuElectricGreen} & \textcolor{psuBlack}{RGB: 198, 211, 0} \\
+            \rowcolor{psuForestGreen} \textcolor{psuWhite}{psuForestGreen} & \textcolor{psuBlack}{RGB: 33, 57, 33} \\
+            \rowcolor{psuWhite} \textcolor{psuBlack}{psuWhite} & \textcolor{psuBlack}{RGB: 255, 255, 255} \\
+            \rowcolor{psuBlack} \textcolor{psuWhite}{psuBlack} & \textcolor{psuWhite}{RGB: 0, 0, 0} \\
+        \end{tabular}
+    \end{table}
+}
+
+% Usage: \showPSUColorsSecondary
+% Output: Table with names and secondary colors
+\newcommand{\showPSUColorsSecondary}{
+    \begin{table}
+        \centering
+        \begin{tabular}{c|c}
+            \rowcolor{psuRed} \textcolor{psuWhite}{psuRed} & \textcolor{psuBlack}{RGB: 230, 73, 39} \\
+            \rowcolor{psuSand} \textcolor{psuBlack}{psuSand} & \textcolor{psuBlack}{RGB: 232, 211, 162} \\
+            \rowcolor{psuBlue} \textcolor{psuWhite}{psuBlue} & \textcolor{psuBlack}{RGB: 0, 138, 193} \\
+            \rowcolor{psuLightBlue} \textcolor{psuBlack}{psuLightBlue} & \textcolor{psuBlack}{RGB: 165, 223, 249} \\
+            \rowcolor{psuStone} \textcolor{psuWhite}{psuStone} & \textcolor{psuBlack}{RGB: 138, 138, 103} \\
+            \rowcolor{psuYellow} \textcolor{psuBlack}{psuYellow} & \textcolor{psuBlack}{RGB: 255, 194, 14} \\
+            \rowcolor{psuOrange} \textcolor{psuBlack}{psuOrange} & \textcolor{psuBlack}{RGB: 246, 139, 31} \\
+            \rowcolor{psuPurple} \textcolor{psuWhite}{psuPurple} & \textcolor{psuBlack}{RGB: 101, 3, 96} \\
+        \end{tabular}
+    \end{table}
+}
