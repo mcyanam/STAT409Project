@@ -1,0 +1,52 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{psu-thesis-chicago}[2025/04/11 Chicago Style formatting for PSU Thesis]
+
+% Load required packages for Chicago Style formatting
+\RequirePackage[authordate,backend=biber]{biblatex-chicago}
+\RequirePackage{endnotes}
+\RequirePackage{csquotes}
+
+% Configure biblatex-chicago
+\ExecuteBibliographyOptions{
+  booklongxref=true,
+  giveninits=false, % Full first names
+  isbn=false,
+  url=true,
+  doi=true
+}
+
+% Setup notes
+\let\footnote=\endnote
+\renewcommand{\notesname}{Notes}
+
+% Chicago Style block quotes
+\newenvironment{chicagoblock}{%
+  \begin{quote}
+  \SingleSpacing
+}{%
+  \end{quote}
+}
+
+% Configure bibliography with proper indentation and spacing
+\defbibenvironment{bibliography}
+  {\list{}
+    {\setlength{\leftmargin}{0.5in}%
+     \setlength{\itemindent}{-0.5in}%
+     \setlength{\itemsep}{\bibitemsep}%
+     \setlength{\parsep}{\bibparsep}}}
+  {\endlist}
+  {\item}
+
+% Command for printing the bibliography
+\newcommand{\printchicagobibliography}{%
+  \SingleSpacing
+  \printbibliography[heading=bibintoc,title=Bibliography]
+}
+
+% Command for printing endnotes
+\newcommand{\printchicagonotes}{%
+  \SingleSpacing
+  \theendnotes
+}
+
+\endinput
