@@ -2,6 +2,9 @@
 \usepackage{psu-thesis-chicago}
 \usepackage{todonotes}
 \usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+\usepackage{siunitx}
+\usepackage{tikz,pgfplots,pgfplotstable}
+\pgfplotsset{compat=newest}
 
 \addbibresource{refs.bib}
 
@@ -28,7 +31,41 @@
 \makecopyright
 
 \begin{psuabstract}
-    TODO: Add abstract
+    Intonation, or voicing, in pipe organ technology involves adjusting each
+    pipe to produce its optimal sound.
+    This process entails determining the appropriate tone that harmonizes with
+    the organ’s style, the architectural setting, and the preferences of its
+    owner.
+    While the “perfect” tone is largely subjective, certain aspects, such as 
+    volume and harmony, can be quantified using contemporary tools.
+    
+    The relationship between the diameter of the pipe’s toe, the size of the toe
+    hole, airflow, and frequency is paramount in comprehending and optimizing
+    organ pipe performance.
+    These parameters interact to influence the pipe’s tonal characteristics,
+    acoustic intensity, and harmonic structure. Adjustments in the toe hole size
+    regulate airflow, affecting both frequency and tonal balance, while the pipe
+    toe diameter significantly shapes the overall sound profile.
+    Exploring these connections elucidates the intricacies of voicing and 
+    scaling processes, providing insights into both traditional methods and
+    contemporary approaches employing acoustic measurements.
+
+    Our goal is to clarify the relationship between the Ising number and the
+    parameters of the organ pipe, and to provide a model that can be used to
+    dimension the pipes before the voicing stage.
+
+    % Prior to installation in the organ, the pipes undergo a meticulous
+    % fine-tuning process on a specialized bench.
+    % This occurs after the design of the pipes, encompassing their size, shape,
+    % and materials, has been finalized. The process of designing pipes, known as
+    % scaling, has a history dating back to the Middle Ages and adheres to
+    % well-established principles of the craft.
+    % Despite the availability of advanced tools, intonation remains a challenging
+    % aspect. Experts have dedicated centuries to studying and refining intonation
+    % techniques, employing diverse approaches.
+    % One notable method involves a mathematical formula developed by Hardmuth
+    % Ising, which has been extensively studied and discussed by other
+    % researchers.
 \end{psuabstract}
 
 % \begin{psudedication}
@@ -135,7 +172,16 @@ As described in \autocite{2004RosFle-1}, the physics of the organ pipes relies
 on the wave equation.
 Exact solutions for the time-harmonic, longitudinal, wave equation can be
 derived using the method of separation of variables.
-\todo{Add more details about the semianalytical methods}
+
+These solutions give the eigenvalues (i.e., the frequencies). 
+The study of these frequencies -- in particular, the fundamental
+frequency -- is important for the tuning process.
+
+We intendo to explore basic semianalytical methods, such as the method of
+separation of variables, to study the eigenvalues of the wave equation.
+We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
+
+% \todo{Add more details about the semianalytical methods}
 
 \subsection{Numerical methods: Finite Element Method}
 
@@ -143,7 +189,10 @@ The Finite Element Method (FEM) is a numerical method for solving partial
 differential equations (PDEs) and integral equations.
 As the govening equations of the organ pipe are PDEs, we can use FEM to solve
 them.
-\todo{Add more details about the numerical methods}
+Standars techniques are available, and we will not delve into the details of the
+FEM.
+See~\autocite{2021ErnGue-1, 2021ErnGue-2, 2019VazKeeDem-1} for a
+comprehensive introduction to the FEM and PML methods.
 
 \subsection{Machine learning techniques}
 
