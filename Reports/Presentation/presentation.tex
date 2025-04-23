@@ -30,14 +30,56 @@
     \end{frame}
 
     \section{Introduction}
+    \subsection{What is organ tuning?}
 	\begin{frame}
-		\frametitle{Introduction}
+        \frametitle{Introduction: What is organ tuning?}
 		\begin{itemize}
-			\item This is a sample slide using the PSU Beamer theme.
+            \item<1->
+                Pipe organs have been around for hundreds of years, and making them sound just
+                right is a special job called intonation, or \emph{voicing}.
 
-			\item The theme incorporates PSU colors and logos.
+			\item<2->
+                The way a pipe looks and is built -- like its size, shape, and material-- can
+                change how it sounds.
 
-			\item The font used is Acumin Pro.
+			\item<3->
+                These details are decided first, and then the pipes are fine-tuned before being
+                added to the organ.
 		\end{itemize}
 	\end{frame}
+
+    \subsection{Ising number}
+    \begin{frame}
+        \frametitle{Introduction: Ising number}
+        \begin{alertblock}{Ising number}
+            \begin{equation}
+                \label{eq:ising}
+                \mathsf{I}
+                =
+                \frac{v}{\omega}\sqrt{\frac{d}{h^3}}
+                =
+                \frac{1}{\omega}\sqrt{\frac{2 P d}{\rho h^3}},
+            \end{equation}
+        \end{alertblock}
+        \begin{enumerate}
+            \item Can the Ising formula~\ref{eq:ising} be improved, refined, or
+                corrected, in order to match measured data?
+            \item Can the flow rate be included in the Ising formula~\ref{eq:ising}?
+            \item Can we obtain a model reliable enough, that can be used to dimension the
+                pipes before the voicing stage?
+        \end{enumerate}
+    \end{frame}
+
+    \section{Action Plan}
+    \subsection{Methodology}
+    \begin{frame}
+        \frametitle{Action Plan}
+        \begin{enumerate}
+            \item<1-> Semianalytical methods
+            \item<2-> FEM simulations
+            \item<3-> Machine learning (DNN) on JAX
+            \item<4-> Generalized Additive Models (GAM)
+            \item<5-> \emph{We are open to ideas!}
+        \end{enumerate}
+    \end{frame}
 \end{document}
