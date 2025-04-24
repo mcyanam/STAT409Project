@@ -114,10 +114,6 @@ the airflow, and how we can use this information to:
     \item Create a model that helps us design pipes before we start tuning them.
 \end{enumerate}
 
-\section{Background}
-
-\todo{Add background}
-
 \chapter{Action Plan}
 
 In this Chapter, we discuss different approaches for successfully improving the
@@ -174,8 +170,21 @@ our best ability:
 
 \section{Available data sources}
 
-The main source of data in provided by the client.
-\todo{Add more details about the data sources}
+The main source of data is provided by the client.
+The data is currently available in a CSV file, and it contains the following
+columns:
+\begin{itemize}
+    \item \textbf{isBourdon} \textit{boolean} -- Indicates if the pipe is a Bourdon pipe.
+    \item \textbf{flueDepth} \textit{float} -- The depth of the flue.
+    \item \textbf{frequency} \textit{float} -- The frequency of the pipe.
+    \item \textbf{cutUpHeight} \textit{float} -- The cut-up height of the pipe.
+    \item \textbf{diameterToe} \textit{float} -- The diameter of the toe.
+    \item \textbf{acousticIntensity} \textit{float} -- The acoustic intensity of the pipe.
+    \item \textbf{partialN} \textit{float} -- \(N\)th partial of the pipe.
+        The number of partials is not fixed, and it can vary from 1 to 8.
+        This value is bounded between 0 and 100.
+\end{itemize}
+
 
 \section{Methodology}
 
@@ -198,8 +207,6 @@ We intendo to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
 We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
 
-% \todo{Add more details about the semianalytical methods}
-
 \subsection{Numerical methods: Finite Element Method}
 
 The Finite Element Method (FEM) is a numerical method for solving partial
@@ -217,18 +224,25 @@ Modern machine learning techniques can be used to model the data, and to
 predict the Ising number.
 We use a simple neural network to model the data, and to predict the Ising
 number.
-\todo{Add more details about the machine learning techniques}
 The final layer consists of a split layer, where one components relative to the
-Ising number uses a Softplus activation function \todo{Ref needed}, and the
-partials ratios are given by sigmoid activation functions \todo{Ref needed}.
+Ising number uses a Softplus activation function, and the
+partials ratios are given by sigmoid activation functions.
 
 \subsection{Generalized Additive Models}
 
-\todo{Add more details about the Generalized Additive Models}
+Generalized Additive Models (GAMs) as a flexible statistical approach capable
+of modeling nonlinear relationships among multiple acoustic and physical
+parameters.
+Unlike linear models or fixed formulas such as Ising’s, GAMs allow us to
+integrate variables like toe-hole diameter (flow rate),
+flue dimension, cut-up height, and blowing pressure—each of which may influence
+tonal quality in a complex, interdependent manner.
+By using GAMs, we can refine or extend existing models by incorporating
+empirical data collected, thus providing a data-driven framework that supports
+both traditional craftsmanship and modern production scaling in organ building.
 
 \section{Project timeline}
 
-\todo{Description}
 The project timeline is the following:
 \begin{itemize}
     \item Weeks 1-2: Data adquisition, cleaning, and preliminary analysis.
