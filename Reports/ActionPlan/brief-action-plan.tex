@@ -95,8 +95,9 @@ process.
 As the organ pipe design is a complex process, and usually is not a reversible
 process, it is important to ensure that the design of the pipes is done
 correctly; this presents a key constraint for the tuning process.
-The parameters that are involved are diverse, and despite being computable or
-measurable, the access to this information does not simplify the tuning process.
+The parameters involved are various, which makes learning about this complex
+system a difficult task; the understandinf of these parameters and their
+interactions would facilitate the tuning process.
 
 A particular subgoal of this project is to improve the Ising
 formula~\autocite{1971Ising-1}, which reads
@@ -111,13 +112,16 @@ formula~\autocite{1971Ising-1}, which reads
 where \(\mathsf{I}\) is the Ising number, \(\omega\) is the (target) frequency
 of the pipe, \(v\) is the jet initial velocity, \(d\) is the jet initial
 thickness, \(h\) is the cut-up height (or the length of the mouth), \(P\) is the
-blowing pressure, and \(\rho\) is the density of the air.
+blowing pressure (where we require Bernoulli's Law, ~cf. \autocite{2025Lilj-1}),
+and \(\rho\) is the density of the air.
 From \autocite{1971Ising-1, 2025Lilj-1}, it is suggested that the Ising number
 should be constant, preferably close to \( \mathsf{I} \approx 2\).
 
-We would like to include the flow rate in the Ising formula~\ref{eq:ising}, so
-this methodology can be used to dimension the pipes in a reliable way, before
-the voicing stage.
+We would like to include the air flow rate in the Ising formula~\ref{eq:ising},
+so this methodology can be used to dimension the pipes in a reliable way,
+before the voicing stage: as the amount of air flowing through the pipe has been
+seen to affect the sound of the pipe, we would like to include this parameter in
+the Ising formula~\ref{eq:ising}.
 
 \subsubsection{Key questions}
 
@@ -147,9 +151,19 @@ columns:
         The number of partials is not fixed, and it can vary from 1 to 8.
         This value is bounded between 0 and 100.
 \end{itemize}
-
+Other constants are available in the data, such as the density of the air,
+the blowing pressure, and the jet initial velocity.
 
 \subsection{Methodology}
+
+{
+    The way the methods read right now imply that we are still exploring what to use, but we are not sure how to use them, since they are not explicit about how each of the methods connects to the goal and/or how they can connect to each other.  It is ok to acknowledge that we need to explore approaches, but this exploration has to take place with a clear view of how this method will be used to answer the client's question.
+
+For example, when discussing semi-analytical methods you mention that these provide the eigenvalues/frequencies, but you do not connect the dots between how the eigenvalues can be used to optimally tune the pipes.  
+
+By this I do not mean that we have to expand or make this section to make it very explicit. It is ok if we still don't know what we'll ultimately recommend to the client, but a clear connection between each of the approaches proposed and the goals has to be there. 
+
+}
 
 We intend to use a combination of semianalitical methods, numerical methods,
 machine learning techniques, and data analysis techniques to address the
@@ -166,9 +180,18 @@ These solutions give the eigenvalues (i.e., the frequencies).
 The study of these frequencies -- in particular, the fundamental
 frequency -- is important for the tuning process.
 
-We intendo to explore basic semianalytical methods, such as the method of
+We intend to to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
 We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
+
+Our goals are to:
+\begin{itemize}
+    \item Review known formulas and estimations methods that connect the
+        dimensions of the pipe with the harmonic frequencies of the pipe.
+    \item Exhaust literature approaches to the Ising formula.
+    \item Confirm that optimal tuning can be achieved by adjusting the
+        dimensions of the pipe.
+\end{itemize}
 
 \subsubsection{Numerical methods: Finite Element Method}
 
@@ -181,6 +204,23 @@ FEM.
 See~\autocite{2021ErnGue-1, 2021ErnGue-2, 2019VazKeeDem-1} for a
 comprehensive introduction to the FEM and PML methods.
 
+Provided the geometry of the pipe, we can use the FEM to compute the frequencies
+of the pipe, and intensity levels of the sound
+(cf.~\autocite[Figure 1]{2009RucAugFia-1}).
+
+Our goals are to:
+\begin{itemize}
+    \item Provide FEM simulations of the organ pipe, with the underlying
+        physical model (time-harmonic wave equation).
+    \item Compare FEM simulations with the Ising formula and the data provided by
+        the client.
+    \item Allow artificial data generation.
+    \item Compute the intensity (i.e., the sound level) of the simulated pipe,
+        and determine if the harmonics are ``adequate'' (i.e., if they are
+        ``good sounding'').
+\end{itemize}
+
+
 \subsubsection{Machine learning techniques}
 
 Modern machine learning techniques can be used to model the data, and to
@@ -190,6 +230,18 @@ number.
 The final layer consists of a split layer, where one components relative to the
 Ising number uses a Softplus activation function, and the
 partials ratios are given by sigmoid activation functions.
+
+The neural network is trained using the data provided by the client, and we
+use the Ising number and an ideal partials distribution as the target
+values.
+
+Our goals are to:
+\begin{itemize}
+    \item Provide a neural network model that can predict the Ising number and
+        the partials ratios.
+    \item Compare the neural network predictions with the Ising formula and the
+        data provided by the client.
+\end{itemize}
 
 \subsubsection{Generalized Additive Models}
 
@@ -203,6 +255,16 @@ tonal quality in a complex, interdependent manner.
 By using GAMs, we can refine or extend existing models by incorporating
 empirical data collected, thus providing a data-driven framework that supports
 both traditional craftsmanship and modern production scaling in organ building.
+
+Our goals are to:
+\begin{itemize}
+    \item Provide a GAM model that can predict the Ising number and the
+        partials ratios.
+    \item Compare the GAM predictions with the Ising formula and the data
+        provided by the client.
+    \item Provide a GAM model that can be used to dimension the pipes before
+        the voicing stage.
+\end{itemize}
 
 \subsection{Project timeline}
 
