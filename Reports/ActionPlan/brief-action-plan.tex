@@ -1,0 +1,221 @@
+\documentclass{psu-plan}
+\usepackage{psu-thesis-chicago}
+\usepackage{todonotes}
+\usepackage{amsmath,amssymb,amsfonts,amsthm,mathtools}
+\usepackage{siunitx}
+\usepackage{tikz,pgfplots,pgfplotstable}
+\pgfplotsset{compat=newest}
+
+\addbibresource{refs.bib}
+
+\title{Organ Pipe Tuning}
+\author{ Meghana Cyanam, Hai Nguyen, Gabriel Pinochet-Soto }
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Intonation, or voicing, in pipe organ technology involves adjusting each
+    pipe to produce its optimal sound.
+    This process entails determining the appropriate tone that harmonizes with
+    the organ’s style, the architectural setting, and the preferences of its
+    owner.
+    While the “perfect” tone is largely subjective, certain aspects, such as 
+    volume and harmony, can be quantified using contemporary tools.
+    
+    The relationship between the diameter of the pipe’s toe, the size of the toe
+    hole, airflow, and frequency is paramount in comprehending and optimizing
+    organ pipe performance.
+    These parameters interact to influence the pipe’s tonal characteristics,
+    acoustic intensity, and harmonic structure. Adjustments in the toe hole size
+    regulate airflow, affecting both frequency and tonal balance, while the pipe
+    toe diameter significantly shapes the overall sound profile.
+    Exploring these connections elucidates the intricacies of voicing and 
+    scaling processes, providing insights into both traditional methods and
+    contemporary approaches employing acoustic measurements.
+
+    Our goal is to clarify the relationship between the Ising number and the
+    parameters of the organ pipe, and to provide a model that can be used to
+    dimension the pipes before the voicing stage.
+
+    % Prior to installation in the organ, the pipes undergo a meticulous
+    % fine-tuning process on a specialized bench.
+    % This occurs after the design of the pipes, encompassing their size, shape,
+    % and materials, has been finalized. The process of designing pipes, known as
+    % scaling, has a history dating back to the Middle Ages and adheres to
+    % well-established principles of the craft.
+    % Despite the availability of advanced tools, intonation remains a challenging
+    % aspect. Experts have dedicated centuries to studying and refining intonation
+    % techniques, employing diverse approaches.
+    % One notable method involves a mathematical formula developed by Hardmuth
+    % Ising, which has been extensively studied and discussed by other
+    % researchers.
+\end{abstract}
+
+\tableofcontents
+
+
+\section{Introduction}
+
+Pipe organs have been around for hundreds of years, and making them sound just
+right is a special job called intonation, or \emph{voicing}.
+This means adjusting each pipe to create the best sound for the organ.
+The way a pipe looks and is built -- like its size, shape, and material-- can
+change how it sounds.
+These details are decided first, and then the pipes are fine-tuned before being
+added to the organ.
+
+Experts have been studying these details for a long time, and they’ve written
+about different ways to make pipes sound beautiful and harmonious.
+Our goal is to understand how the Ising number -- a special number that helps
+with tuning -- relates to the pipe’s design, how it behaves upon modification of
+the airflow, and how we can use this information to:
+\begin{enumerate}
+    \item Make the Ising number more accurate.
+    \item Include the flow rate in the Ising number.
+    \item Create a model that helps us design pipes before we start tuning them.
+\end{enumerate}
+
+\section{Action Plan}
+
+In this Chapter, we discuss different approaches for successfully improving the
+organ pipe tuning process.
+We discuss the project goals and objectives, potential solutions, and the
+expected outcomes of the project.
+Subsequently, we present the data available, some challenges and concerns that
+we encountered.
+Proposed methodologies are discussed and briefly explained.
+Finally, we present the project timeline and the expected deliverables.
+
+\subsection{Project Goals and Objectives}
+
+The main goal of this project concerns the improvement of the organ pipe tuning
+process.
+As the organ pipe design is a complex process, and usually is not a reversible
+process, it is important to ensure that the design of the pipes is done
+correctly; this presents a key constraint for the tuning process.
+The parameters that are involved are diverse, and despite being computable or
+measurable, the access to this information does not simplify the tuning process.
+
+A particular subgoal of this project is to improve the Ising
+formula~\autocite{1971Ising-1}, which reads
+\begin{equation}
+    \label{eq:ising}
+    \mathsf{I}
+    =
+    \frac{v}{\omega}\sqrt{\frac{d}{h^3}}
+    =
+    \frac{1}{\omega}\sqrt{\frac{2 P d}{\rho h^3}},
+\end{equation}
+where \(\mathsf{I}\) is the Ising number, \(\omega\) is the (target) frequency
+of the pipe, \(v\) is the jet initial velocity, \(d\) is the jet initial
+thickness, \(h\) is the cut-up height (or the length of the mouth), \(P\) is the
+blowing pressure, and \(\rho\) is the density of the air.
+From \autocite{1971Ising-1, 2025Lilj-1}, it is suggested that the Ising number
+should be constant, preferably close to \( \mathsf{I} \approx 2\).
+
+We would like to include the flow rate in the Ising formula~\ref{eq:ising}, so
+this methodology can be used to dimension the pipes in a reliable way, before
+the voicing stage.
+
+\subsubsection{Key questions}
+
+The following questions are key to the project, and we aim to address them to
+our best ability:
+\begin{enumerate}
+    \item Can the Ising formula~\ref{eq:ising} be improved, refined, or
+        corrected, in order to match measured data?
+    \item Can the flow rate be included in the Ising formula~\ref{eq:ising}?
+    \item Can we obtain a model reliable enough, that can be used to dimension the
+        pipes before the voicing stage?
+\end{enumerate}
+
+\subsection{Available data sources}
+
+The main source of data is provided by the client.
+The data is currently available in a CSV file, and it contains the following
+columns:
+\begin{itemize}
+    \item \textbf{isBourdon} \textit{boolean} -- Indicates if the pipe is a Bourdon pipe.
+    \item \textbf{flueDepth} \textit{float} -- The depth of the flue.
+    \item \textbf{frequency} \textit{float} -- The frequency of the pipe.
+    \item \textbf{cutUpHeight} \textit{float} -- The cut-up height of the pipe.
+    \item \textbf{diameterToe} \textit{float} -- The diameter of the toe.
+    \item \textbf{acousticIntensity} \textit{float} -- The acoustic intensity of the pipe.
+    \item \textbf{partialN} \textit{float} -- \(N\)th partial of the pipe.
+        The number of partials is not fixed, and it can vary from 1 to 8.
+        This value is bounded between 0 and 100.
+\end{itemize}
+
+
+\subsection{Methodology}
+
+We intend to use a combination of semianalitical methods, numerical methods,
+machine learning techniques, and data analysis techniques to address the
+questions presented in the previous section.
+
+\subsubsection{Semianalytical methods}
+
+As described in \autocite{2004RosFle-1}, the physics of the organ pipes relies
+on the wave equation.
+Exact solutions for the time-harmonic, longitudinal, wave equation can be
+derived using the method of separation of variables.
+
+These solutions give the eigenvalues (i.e., the frequencies). 
+The study of these frequencies -- in particular, the fundamental
+frequency -- is important for the tuning process.
+
+We intendo to explore basic semianalytical methods, such as the method of
+separation of variables, to study the eigenvalues of the wave equation.
+We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
+
+\subsubsection{Numerical methods: Finite Element Method}
+
+The Finite Element Method (FEM) is a numerical method for solving partial
+differential equations (PDEs) and integral equations.
+As the govening equations of the organ pipe are PDEs, we can use FEM to solve
+them.
+Standars techniques are available, and we will not delve into the details of the
+FEM.
+See~\autocite{2021ErnGue-1, 2021ErnGue-2, 2019VazKeeDem-1} for a
+comprehensive introduction to the FEM and PML methods.
+
+\subsubsection{Machine learning techniques}
+
+Modern machine learning techniques can be used to model the data, and to
+predict the Ising number.
+We use a simple neural network to model the data, and to predict the Ising
+number.
+The final layer consists of a split layer, where one components relative to the
+Ising number uses a Softplus activation function, and the
+partials ratios are given by sigmoid activation functions.
+
+\subsubsection{Generalized Additive Models}
+
+Generalized Additive Models (GAMs) as a flexible statistical approach capable
+of modeling nonlinear relationships among multiple acoustic and physical
+parameters.
+Unlike linear models or fixed formulas such as Ising’s, GAMs allow us to
+integrate variables like toe-hole diameter (flow rate),
+flue dimension, cut-up height, and blowing pressure—each of which may influence
+tonal quality in a complex, interdependent manner.
+By using GAMs, we can refine or extend existing models by incorporating
+empirical data collected, thus providing a data-driven framework that supports
+both traditional craftsmanship and modern production scaling in organ building.
+
+\subsection{Project timeline}
+
+The project timeline is the following:
+\begin{itemize}
+    \item Weeks 1-2: Data adquisition, cleaning, and preliminary analysis.
+    \item Weeks 3-4: Preliminary exploration of the data.
+    \item Weeks 5-8: Implementation of the methodologies.
+    \item Weeks 9: Synthesis of the results.
+    \item Weeks 10: Final report and presentation.
+\end{itemize}
+
+\nocite{*} % This will include all references in the bibliography
+\printbibliography[heading=bibintoc,title=Bibliography]
+
+\end{document}

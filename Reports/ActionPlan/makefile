@@ -1,7 +1,7 @@
 # Makefile for compiling LaTeX documents with xelatex and organizing output files
 
 # Define the main document name (without extension)
-EXAMPLES = report
+EXAMPLES = report brief-action-plan
 
 # List of LaTeX style files
 STYLE = *.sty
