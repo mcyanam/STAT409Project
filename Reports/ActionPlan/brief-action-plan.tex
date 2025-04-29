@@ -53,8 +53,7 @@
     % researchers.
 \end{abstract}
 
-\tableofcontents
-
+% \tableofcontents
 
 \section{Introduction}
 
@@ -79,14 +78,14 @@ the airflow, and how we can use this information to:
 
 \section{Action Plan}
 
-In this Chapter, we discuss different approaches for successfully improving the
-organ pipe tuning process.
-We discuss the project goals and objectives, potential solutions, and the
-expected outcomes of the project.
-Subsequently, we present the data available, some challenges and concerns that
-we encountered.
-Proposed methodologies are discussed and briefly explained.
-Finally, we present the project timeline and the expected deliverables.
+% In this Chapter, we discuss different approaches for successfully improving the
+% organ pipe tuning process.
+% We discuss the project goals and objectives, potential solutions, and the
+% expected outcomes of the project.
+% Subsequently, we present the data available, some challenges and concerns that
+% we encountered.
+% Proposed methodologies are discussed and briefly explained.
+% Finally, we present the project timeline and the expected deliverables.
 
 \subsection{Project Goals and Objectives}
 
@@ -156,18 +155,16 @@ the blowing pressure, and the jet initial velocity.
 
 \subsection{Methodology}
 
-{
-    The way the methods read right now imply that we are still exploring what to use, but we are not sure how to use them, since they are not explicit about how each of the methods connects to the goal and/or how they can connect to each other.  It is ok to acknowledge that we need to explore approaches, but this exploration has to take place with a clear view of how this method will be used to answer the client's question.
+% We intend to use a combination of semianalytical methods, numerical methods,
+% machine learning techniques, and data analysis techniques to address the
+% questions presented in the previous section.
 
-For example, when discussing semi-analytical methods you mention that these provide the eigenvalues/frequencies, but you do not connect the dots between how the eigenvalues can be used to optimally tune the pipes.  
+We intend to employ an integrated approach combining semianalytical methods, numerical methods, machine learning, 
+and advanced statistical techniques to systematically address the client's question regarding optimal organ 
+pipe tuning and intonation. 
+Each method is selected not only for its individual strengths but also for how collectively they can provide 
+a comprehensive understanding and practical solutions to the organ tuning challenge.
 
-By this I do not mean that we have to expand or make this section to make it very explicit. It is ok if we still don't know what we'll ultimately recommend to the client, but a clear connection between each of the approaches proposed and the goals has to be there. 
-
-}
-
-We intend to use a combination of semianalitical methods, numerical methods,
-machine learning techniques, and data analysis techniques to address the
-questions presented in the previous section.
 
 \subsubsection{Semianalytical methods}
 
@@ -184,7 +181,7 @@ We intend to to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
 We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
 
-Our goals are to:
+Specifically, our objectives include:
 \begin{itemize}
     \item Review known formulas and estimations methods that connect the
         dimensions of the pipe with the harmonic frequencies of the pipe.
@@ -208,12 +205,11 @@ Provided the geometry of the pipe, we can use the FEM to compute the frequencies
 of the pipe, and intensity levels of the sound
 (cf.~\autocite[Figure 1]{2009RucAugFia-1}).
 
-Our goals are to:
+The goals of FEM application are to:
 \begin{itemize}
     \item Provide FEM simulations of the organ pipe, with the underlying
         physical model (time-harmonic wave equation).
-    \item Compare FEM simulations with the Ising formula and the data provided by
-        the client.
+    \item Compare FEM simulations with the Ising formula and the client-provided data.
     \item Allow artificial data generation.
     \item Compute the intensity (i.e., the sound level) of the simulated pipe,
         and determine if the harmonics are ``adequate'' (i.e., if they are
@@ -223,19 +219,26 @@ Our goals are to:
 
 \subsubsection{Machine learning techniques}
 
-Modern machine learning techniques can be used to model the data, and to
-predict the Ising number.
-We use a simple neural network to model the data, and to predict the Ising
-number.
-The final layer consists of a split layer, where one components relative to the
-Ising number uses a Softplus activation function, and the
-partials ratios are given by sigmoid activation functions.
+% Modern machine learning techniques can be used to model the data, and to
+% predict the Ising number.
+% We use a simple neural network to model the data, and to predict the Ising
+% number.
+% The final layer consists of a split layer, where one components relative to the
+% Ising number uses a Softplus activation function, and the
+% partials ratios are given by sigmoid activation functions.
 
-The neural network is trained using the data provided by the client, and we
-use the Ising number and an ideal partials distribution as the target
-values.
+% The neural network is trained using the data provided by the client, and we
+% use the Ising number and an ideal partials distribution as the target
+% values.
 
-Our goals are to:
+Machine learning techniques, specifically neural networks, will leverage numerical simulations and empirical 
+client-provided data to predict optimal pipe dimensions and acoustic properties. 
+A neural network with tailored architecture—including a Softplus activation function for predicting the 
+Ising number and sigmoid functions for partial ratios—will be trained. 
+This method will effectively capture complex nonlinearities and relationships inherent in organ pipe acoustics.
+
+% Our goals are to:
+The machine learning objectives are:
 \begin{itemize}
     \item Provide a neural network model that can predict the Ising number and
         the partials ratios.
@@ -243,27 +246,43 @@ Our goals are to:
         data provided by the client.
 \end{itemize}
 
-\subsubsection{Generalized Additive Models}
+% \subsubsection{Generalized Additive Models}
 
-Generalized Additive Models (GAMs) as a flexible statistical approach capable
-of modeling nonlinear relationships among multiple acoustic and physical
-parameters.
-Unlike linear models or fixed formulas such as Ising’s, GAMs allow us to
-integrate variables like toe-hole diameter (flow rate),
-flue dimension, cut-up height, and blowing pressure—each of which may influence
-tonal quality in a complex, interdependent manner.
-By using GAMs, we can refine or extend existing models by incorporating
-empirical data collected, thus providing a data-driven framework that supports
-both traditional craftsmanship and modern production scaling in organ building.
+% Generalized Additive Models (GAMs) as a flexible statistical approach capable
+% of modeling nonlinear relationships among multiple acoustic and physical
+% parameters.
+% Unlike linear models or fixed formulas such as Ising’s, GAMs allow us to
+% integrate variables like toe-hole diameter (flow rate),
+% flue dimension, cut-up height, and blowing pressure—each of which may influence
+% tonal quality in a complex, interdependent manner.
+% By using GAMs, we can refine or extend existing models by incorporating
+% empirical data collected, thus providing a data-driven framework that supports
+% both traditional craftsmanship and modern production scaling in organ building.
 
-Our goals are to:
+% Our goals are to:
+% \begin{itemize}
+%     \item Provide a GAM model that can predict the Ising number and the
+%         partials ratios.
+%     \item Compare the GAM predictions with the Ising formula and the data
+%         provided by the client.
+%     \item Provide a GAM model that can be used to dimension the pipes before
+%         the voicing stage.
+% \end{itemize}
+
+\subsubsection{Generalized Additive Models (GAMs)}
+Generalized Additive Models (GAMs) offer a robust statistical framework for modeling complex, 
+nonlinear interactions between multiple pipe parameters such as toe-hole diameter (flow rate), flue dimension,
+cut-up height, and blowing pressure—parameters critically affecting pipe tonal quality. 
+GAMs will integrate empirical data, facilitating a nuanced understanding of how these factors interact in a nonlinear 
+manner, thus providing a data-driven approach to refine existing formulas, like the Ising formula, and support 
+practical decision-making in pipe manufacturing and voicing.
+
+Our GAM-specific goals include:
 \begin{itemize}
-    \item Provide a GAM model that can predict the Ising number and the
-        partials ratios.
-    \item Compare the GAM predictions with the Ising formula and the data
-        provided by the client.
-    \item Provide a GAM model that can be used to dimension the pipes before
-        the voicing stage.
+    \item Constructing flexible predictive models that accurately determine the Ising number and partials ratios.
+    \item Comparing GAM predictions to both analytical models and real-world data.
+    \item Providing actionable insights for pipe dimensioning ahead of the voicing stage, enhancing efficiency 
+    and tonal consistency in organ manufacturing.
 \end{itemize}
 
 \subsection{Project timeline}
@@ -281,3 +300,4 @@ The project timeline is the following:
 \printbibliography[heading=bibintoc,title=Bibliography]
 
 \end{document}
+
