@@ -1,4 +1,4 @@
-"""DNNPype: A Deep Neural Network for Ising Model Simulation"""
+"""DNNPype/model.py: DNN models for pipe modeling."""
 
 from __future__ import annotations
 from typing import List
