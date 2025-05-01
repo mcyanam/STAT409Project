@@ -94,11 +94,11 @@ added to the organ.
 Experts have been studying these details for a long time, and they’ve written
 about different ways to make pipes sound beautiful and harmonious.
 Our goal is to understand how the Ising number -- a special number that helps
-with harmonisation -- relates to the pipe’s design, how it behaves upon modification of
+with harmonization -- relates to the pipe’s design, how it behaves upon modification of
 the airflow, and how we can use this information to:
 \begin{enumerate}
     \item Make the Ising number more accurate.
-    \item Include the flow rate in the Ising number.
+    \item include the flow rate in the Ising number.
     \item Create a model that helps us design pipes before we start intonating them.
 \end{enumerate}
 
@@ -119,7 +119,7 @@ The main goal of this project concerns the improvement of the organ pipe voicing
 process.
 As the organ pipe design is a complex process, and usually is not a reversible
 process, it is important to ensure that the design of the pipes is done
-correctly; this presents a key constraint for the harmonisation process.
+correctly; this presents a key constraint for the harmonization process.
 The parameters that are involved are diverse, and despite being computable or
 measurable, the access to this information does not simplify the process.
 
@@ -141,7 +141,7 @@ From \autocite{1971Ising-1, 2025Lilj-1}, it is suggested that the Ising number
 should be constant, preferably close to \( \mathsf{I} \approx 2\).
 
 We would like to include the air flow rate in the Ising formula~\ref{eq:ising},
-so this methodology can be used to dimension the pipes in a reliable way,
+so this methodology can be used to dimension the pipes reliably,
 before the voicing stage: as the amount of air flowing through the pipe has been
 seen to affect the sound of the pipe, we would like to include this parameter in
 the Ising formula~\ref{eq:ising}.
@@ -181,7 +181,7 @@ following columns:
 We intend to employ an integrated approach combining semianalytical methods, numerical methods, machine learning, 
 and advanced statistical techniques to systematically address the client's question regarding optimal organ 
 pipe intonation.
-Each method is selected not only for its individual strengths but also for how collectively they can provide 
+Each method is selected not only for its individual strengths, but also for how collectively they can provide 
 a comprehensive understanding and practical solutions to the organ voicing process.
 
 \subsection{Semianalytical methods}
@@ -195,7 +195,7 @@ These solutions give the eigenvalues (i.e., the frequencies).
 The study of these frequencies -- in particular, the fundamental
 frequency -- is important for the intonation process.
 
-We intendo to explore basic semianalytical methods, such as the method of
+We intend to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
 We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
 
@@ -212,9 +212,9 @@ Specifically, our objectives include:
 
 The Finite Element Method (FEM) is a numerical method for solving partial
 differential equations (PDEs) and integral equations.
-As the govening equations of the organ pipe are PDEs, we can use FEM to solve
+As the governing equations of the organ pipe are PDEs, we can use FEM to solve
 them.
-Standars techniques are available, and we will not delve into the details of the
+Standard techniques are available, and we will not delve into the details of the
 FEM.
 See~\autocite{2021ErnGue-1, 2021ErnGue-2, 2019VazKeeDem-1} for a
 comprehensive introduction to the FEM and PML methods.
@@ -245,9 +245,9 @@ This method will effectively capture complex nonlinearities and relationships in
 % Our goals are to:
 The machine learning objectives are:
 \begin{itemize}
-    \item Provide a neural network model that can predict the Ising number and
+    \item provide a neural network model that can predict the Ising number and
         the partials ratios.
-    \item Compare the neural network predictions with the Ising formula and the
+    \item compare the neural network predictions with the Ising formula and the
         data provided by the client.
 \end{itemize}
 
@@ -268,7 +268,7 @@ both traditional craftsmanship and modern production scaling in organ building.
 
 The project timeline is the following:
 \begin{itemize}
-    \item Weeks 1-2: Data adquisition, cleaning, and preliminary analysis.
+    \item Weeks 1-2: Data acquisition, cleaning, and preliminary analysis.
     \item Weeks 3-4: Preliminary exploration of the data.
     \item Weeks 5-8: Implementation of the methodologies.
     \item Weeks 9: Synthesis of the results.

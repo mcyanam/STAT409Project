@@ -23,7 +23,7 @@
     owner.
     While the “perfect” tone is largely subjective, certain aspects, such as 
     volume and harmony, can be quantified using contemporary tools.
-    
+ 
     The relationship between the diameter of the pipe’s toe, the size of the toe
     hole, airflow, and frequency is paramount in comprehending and optimizing
     organ pipe performance.
@@ -82,8 +82,8 @@ As the organ pipe design is a complex process, and usually is not a reversible
 process, it is important to ensure that the design of the pipes is done
 correctly; this presents a key constraint for the intonation process.
 The parameters involved are various, which makes learning about this complex
-system a difficult task; the understandinf of these parameters and their
-interactions would facilitate the harmonisation process.
+system a difficult task; the understanding of these parameters and their
+interactions would facilitate the harmonization process.
 
 A particular subgoal of this project is to improve the Ising
 formula~\autocite{1971Ising-1}, which reads
@@ -104,7 +104,7 @@ From \autocite{1971Ising-1, 2025Lilj-1}, it is suggested that the Ising number
 should be constant, preferably close to \( \mathsf{I} \approx 2\).
 
 We would like to include the air flow rate in the Ising formula~\ref{eq:ising},
-so this methodology can be used to dimension the pipes in a reliable way,
+so this methodology can be used to dimension the pipes reliably,
 before the voicing stage: as the amount of air flowing through the pipe has been
 seen to affect the sound of the pipe, we would like to include this parameter in
 the Ising formula~\ref{eq:ising}.
@@ -116,8 +116,8 @@ our best ability:
 \begin{enumerate}
     \item Can the Ising formula~\ref{eq:ising} be improved, refined, or
         corrected, in order to match measured data?
-    \item Can the flow rate be included in the Ising formula~\ref{eq:ising}?
-    \item Can we obtain a model reliable enough, that can be used to dimension the
+ \item Can the flow rate be included in the Ising formula~\ref{eq:ising}?
+ \item Can we obtain a model reliable enough, that can be used to dimension the
         pipes before the voicing stage?
 \end{enumerate}
 
@@ -145,7 +145,7 @@ the blowing pressure, and the jet initial velocity.
 We intend to employ an integrated approach combining semianalytical methods, numerical methods, machine learning, 
 and advanced statistical techniques to systematically address the client's question regarding optimal organ 
 pipe intonation.
-Each method is selected not only for its individual strengths but also for how collectively they can provide 
+Each method is selected not only for its individual strengths, but also for how collectively they can provide 
 a comprehensive understanding and practical solutions to the organ voicing process.
 
 \subsubsection{Semianalytical methods}
@@ -159,7 +159,7 @@ These solutions give the eigenvalues (i.e., the frequencies).
 The study of these frequencies -- in particular, the fundamental
 frequency -- is important for the voicing process.
 
-We intend to to explore basic semianalytical methods, such as the method of
+We intend to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
 We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
 
@@ -167,8 +167,8 @@ Specifically, our objectives include:
 \begin{itemize}
     \item Review known formulas and estimations methods that connect the
         dimensions of the pipe with the harmonic frequencies of the pipe.
-    \item Exhaust literature approaches to the Ising formula.
-    \item Confirm that optimal voicing can be achieved by adjusting the
+ \item Exhaust literature approaches to the Ising formula.
+ \item Confirm that optimal voicing can be achieved by adjusting the
         dimensions of the pipe.
 \end{itemize}
 
@@ -176,9 +176,9 @@ Specifically, our objectives include:
 
 The Finite Element Method (FEM) is a numerical method for solving partial
 differential equations (PDEs) and integral equations.
-As the govening equations of the organ pipe are PDEs, we can use FEM to solve
+As the governing equations of the organ pipe are PDEs, we can use FEM to solve
 them.
-Standars techniques are available, and we will not delve into the details of the
+Standard techniques are available, and we will not delve into the details of the
 FEM.
 See~\autocite{2021ErnGue-1, 2021ErnGue-2, 2019VazKeeDem-1} for a
 comprehensive introduction to the FEM and PML methods.
@@ -191,9 +191,9 @@ The goals of FEM application are to:
 \begin{itemize}
     \item Provide FEM simulations of the organ pipe, with the underlying
         physical model (time-harmonic wave equation).
-    \item Compare FEM simulations with the Ising formula and the client-provided data.
-    \item Allow artificial data generation.
-    \item Compute the intensity (i.e., the sound level) of the simulated pipe,
+ \item Compare FEM simulations with the Ising formula and the client-provided data.
+ \item Allow artificial data generation.
+ \item Compute the intensity (i.e., the sound level) of the simulated pipe,
         and determine if the harmonics are ``adequate'' (i.e., if they are
         ``good sounding'').
 \end{itemize}
@@ -201,57 +201,22 @@ The goals of FEM application are to:
 
 \subsubsection{Machine learning techniques}
 
-% Modern machine learning techniques can be used to model the data, and to
-% predict the Ising number.
-% We use a simple neural network to model the data, and to predict the Ising
-% number.
-% The final layer consists of a split layer, where one components relative to the
-% Ising number uses a Softplus activation function, and the
-% partials ratios are given by sigmoid activation functions.
-
-% The neural network is trained using the data provided by the client, and we
-% use the Ising number and an ideal partials distribution as the target
-% values.
-
 Machine learning techniques, specifically neural networks, will leverage numerical simulations and empirical 
 client-provided data to predict optimal pipe dimensions and acoustic properties. 
 A neural network with tailored architecture—including a Softplus activation function for predicting the 
 Ising number and sigmoid functions for partial ratios—will be trained. 
 This method will effectively capture complex nonlinearities and relationships inherent in organ pipe acoustics.
 
-% Our goals are to:
 The machine learning objectives are:
 \begin{itemize}
     \item Provide a neural network model that can predict the Ising number and
         the partials ratios.
-    \item Compare the neural network predictions with the Ising formula and the
+ \item Compare the neural network predictions with the Ising formula and the
         data provided by the client.
 \end{itemize}
 
-% \subsubsection{Generalized Additive Models}
-
-% Generalized Additive Models (GAMs) as a flexible statistical approach capable
-% of modeling nonlinear relationships among multiple acoustic and physical
-% parameters.
-% Unlike linear models or fixed formulas such as Ising’s, GAMs allow us to
-% integrate variables like toe-hole diameter (flow rate),
-% flue dimension, cut-up height, and blowing pressure—each of which may influence
-% tonal quality in a complex, interdependent manner.
-% By using GAMs, we can refine or extend existing models by incorporating
-% empirical data collected, thus providing a data-driven framework that supports
-% both traditional craftsmanship and modern production scaling in organ building.
-
-% Our goals are to:
-% \begin{itemize}
-%     \item Provide a GAM model that can predict the Ising number and the
-%         partials ratios.
-%     \item Compare the GAM predictions with the Ising formula and the data
-%         provided by the client.
-%     \item Provide a GAM model that can be used to dimension the pipes before
-%         the voicing stage.
-% \end{itemize}
-
 \subsubsection{Generalized Additive Models (GAMs)}
+
 Generalized Additive Models (GAMs) offer a robust statistical framework for modeling complex, 
 nonlinear interactions between multiple pipe parameters such as toe-hole diameter (flow rate), flue dimension,
 cut-up height, and blowing pressure—parameters critically affecting pipe tonal quality. 
@@ -262,8 +227,8 @@ practical decision-making in pipe manufacturing and voicing.
 Our GAM-specific goals include:
 \begin{itemize}
     \item Constructing flexible predictive models that accurately determine the Ising number and partials ratios.
-    \item Comparing GAM predictions to both analytical models and real-world data.
-    \item Providing actionable insights for pipe dimensioning ahead of the voicing stage, enhancing efficiency 
+ \item Comparing GAM predictions to both analytical models and real-world data.
+ \item Providing actionable insights for pipe dimensioning ahead of the voicing stage, enhancing efficiency 
     and tonal consistency in organ manufacturing.
 \end{itemize}
 
@@ -271,7 +236,7 @@ Our GAM-specific goals include:
 
 The project timeline is the following:
 \begin{itemize}
-    \item Weeks 1-2: Data adquisition, cleaning, and preliminary analysis.
+    \item Weeks 1-2: Data acquisition, cleaning, and preliminary analysis.
     \item Weeks 3-4: Preliminary exploration of the data.
     \item Weeks 5-8: Implementation of the methodologies.
     \item Weeks 9: Synthesis of the results.
@@ -282,4 +247,3 @@ The project timeline is the following:
 \printbibliography[heading=bibintoc,title=Bibliography]
 
 \end{document}
-
