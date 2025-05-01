@@ -8,7 +8,7 @@
 
 \addbibresource{refs.bib}
 
-\title{Organ Pipe Tuning}
+\title{Organ Pipe Voicing}
 \author{
     Meghana Cyanam \\
     Hai Nguyen \\
@@ -53,23 +53,11 @@
     Our goal is to clarify the relationship between the Ising number and the
     parameters of the organ pipe, and to provide a model that can be used to
     dimension the pipes before the voicing stage.
-
-    % Prior to installation in the organ, the pipes undergo a meticulous
-    % fine-tuning process on a specialized bench.
-    % This occurs after the design of the pipes, encompassing their size, shape,
-    % and materials, has been finalized. The process of designing pipes, known as
-    % scaling, has a history dating back to the Middle Ages and adheres to
-    % well-established principles of the craft.
-    % Despite the availability of advanced tools, intonation remains a challenging
-    % aspect. Experts have dedicated centuries to studying and refining intonation
-    % techniques, employing diverse approaches.
-    % One notable method involves a mathematical formula developed by Hardmuth
-    % Ising, which has been extensively studied and discussed by other
-    % researchers.
 \end{psuabstract}
 
 % \begin{psudedication}
 % \end{psudedication}
+
 % \begin{psuacknowledgments}
 % \end{psuacknowledgments}
 
@@ -106,18 +94,18 @@ added to the organ.
 Experts have been studying these details for a long time, and they’ve written
 about different ways to make pipes sound beautiful and harmonious.
 Our goal is to understand how the Ising number -- a special number that helps
-with tuning -- relates to the pipe’s design, how it behaves upon modification of
+with harmonisation -- relates to the pipe’s design, how it behaves upon modification of
 the airflow, and how we can use this information to:
 \begin{enumerate}
     \item Make the Ising number more accurate.
     \item Include the flow rate in the Ising number.
-    \item Create a model that helps us design pipes before we start tuning them.
+    \item Create a model that helps us design pipes before we start intonating them.
 \end{enumerate}
 
 \chapter{Action Plan}
 
 In this Chapter, we discuss different approaches for successfully improving the
-organ pipe tuning process.
+organ pipe voicing process.
 We discuss the project goals and objectives, potential solutions, and the
 expected outcomes of the project.
 Subsequently, we present the data available, some challenges and concerns that
@@ -127,13 +115,13 @@ Finally, we present the project timeline and the expected deliverables.
 
 \section{Project Goals and Objectives}
 
-The main goal of this project concerns the improvement of the organ pipe tuning
+The main goal of this project concerns the improvement of the organ pipe voicing
 process.
 As the organ pipe design is a complex process, and usually is not a reversible
 process, it is important to ensure that the design of the pipes is done
-correctly; this presents a key constraint for the tuning process.
+correctly; this presents a key constraint for the harmonisation process.
 The parameters that are involved are diverse, and despite being computable or
-measurable, the access to this information does not simplify the tuning process.
+measurable, the access to this information does not simplify the process.
 
 A particular subgoal of this project is to improve the Ising
 formula~\autocite{1971Ising-1}, which reads
@@ -152,9 +140,11 @@ blowing pressure, and \(\rho\) is the density of the air.
 From \autocite{1971Ising-1, 2025Lilj-1}, it is suggested that the Ising number
 should be constant, preferably close to \( \mathsf{I} \approx 2\).
 
-We would like to include the flow rate in the Ising formula~\ref{eq:ising}, so
-this methodology can be used to dimension the pipes in a reliable way, before
-the voicing stage.
+We would like to include the air flow rate in the Ising formula~\ref{eq:ising},
+so this methodology can be used to dimension the pipes in a reliable way,
+before the voicing stage: as the amount of air flowing through the pipe has been
+seen to affect the sound of the pipe, we would like to include this parameter in
+the Ising formula~\ref{eq:ising}.
 
 \subsection{Key questions}
 
@@ -171,8 +161,8 @@ our best ability:
 \section{Available data sources}
 
 The main source of data is provided by the client.
-The data is currently available in a CSV file, and it contains the following
-columns:
+The data is currently available in a \texttt{csv} file, and it contains the
+following columns:
 \begin{itemize}
     \item \textbf{isBourdon} \textit{boolean} -- Indicates if the pipe is a Bourdon pipe.
     \item \textbf{flueDepth} \textit{float} -- The depth of the flue.
@@ -188,9 +178,11 @@ columns:
 
 \section{Methodology}
 
-We intend to use a combination of semianalitical methods, numerical methods,
-machine learning techniques, and data analysis techniques to address the
-questions presented in the previous section.
+We intend to employ an integrated approach combining semianalytical methods, numerical methods, machine learning, 
+and advanced statistical techniques to systematically address the client's question regarding optimal organ 
+pipe intonation.
+Each method is selected not only for its individual strengths but also for how collectively they can provide 
+a comprehensive understanding and practical solutions to the organ voicing process.
 
 \subsection{Semianalytical methods}
 
@@ -201,11 +193,20 @@ derived using the method of separation of variables.
 
 These solutions give the eigenvalues (i.e., the frequencies). 
 The study of these frequencies -- in particular, the fundamental
-frequency -- is important for the tuning process.
+frequency -- is important for the intonation process.
 
 We intendo to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
 We rely on available literature~\autocite{2004RosFle-1, 2012RosFle-1}.
+
+Specifically, our objectives include:
+\begin{itemize}
+    \item Review known formulas and estimations methods that connect the
+        dimensions of the pipe with the harmonic frequencies of the pipe.
+    \item Exhaust literature approaches to the Ising formula.
+    \item Confirm that optimal voicing can be achieved by adjusting the
+        dimensions of the pipe.
+\end{itemize}
 
 \subsection{Numerical methods: Finite Element Method}
 
@@ -218,15 +219,37 @@ FEM.
 See~\autocite{2021ErnGue-1, 2021ErnGue-2, 2019VazKeeDem-1} for a
 comprehensive introduction to the FEM and PML methods.
 
+Provided the geometry of the pipe, we can use the FEM to compute the frequencies
+of the pipe, and intensity levels of the sound
+(cf.~\autocite[Figure 1]{2009RucAugFia-1}).
+
+The goals of FEM application are to:
+\begin{itemize}
+    \item Provide FEM simulations of the organ pipe, with the underlying
+        physical model (time-harmonic wave equation).
+    \item Compare FEM simulations with the Ising formula and the client-provided data.
+    \item Allow artificial data generation.
+    \item Compute the intensity (i.e., the sound level) of the simulated pipe,
+        and determine if the harmonics are ``adequate'' (i.e., if they are
+        ``good sounding'').
+\end{itemize}
+
 \subsection{Machine learning techniques}
 
-Modern machine learning techniques can be used to model the data, and to
-predict the Ising number.
-We use a simple neural network to model the data, and to predict the Ising
-number.
-The final layer consists of a split layer, where one components relative to the
-Ising number uses a Softplus activation function, and the
-partials ratios are given by sigmoid activation functions.
+Machine learning techniques, specifically neural networks, will leverage numerical simulations and empirical 
+client-provided data to predict optimal pipe dimensions and acoustic properties. 
+A neural network with tailored architecture—including a Softplus activation function for predicting the 
+Ising number and sigmoid functions for partial ratios—will be trained. 
+This method will effectively capture complex nonlinearities and relationships inherent in organ pipe acoustics.
+
+% Our goals are to:
+The machine learning objectives are:
+\begin{itemize}
+    \item Provide a neural network model that can predict the Ising number and
+        the partials ratios.
+    \item Compare the neural network predictions with the Ising formula and the
+        data provided by the client.
+\end{itemize}
 
 \subsection{Generalized Additive Models}
 
