@@ -8,7 +8,7 @@
 
 \addbibresource{refs.bib}
 
-\title{Organ Pipe Tuning}
+\title{Organ Pipe Voicing}
 \author{ Meghana Cyanam, Hai Nguyen, Gabriel Pinochet-Soto }
 
 \begin{document}
@@ -38,19 +38,6 @@
     Our goal is to clarify the relationship between the Ising number and the
     parameters of the organ pipe, and to provide a model that can be used to
     dimension the pipes before the voicing stage.
-
-    % Prior to installation in the organ, the pipes undergo a meticulous
-    % fine-tuning process on a specialized bench.
-    % This occurs after the design of the pipes, encompassing their size, shape,
-    % and materials, has been finalized. The process of designing pipes, known as
-    % scaling, has a history dating back to the Middle Ages and adheres to
-    % well-established principles of the craft.
-    % Despite the availability of advanced tools, intonation remains a challenging
-    % aspect. Experts have dedicated centuries to studying and refining intonation
-    % techniques, employing diverse approaches.
-    % One notable method involves a mathematical formula developed by Hardmuth
-    % Ising, which has been extensively studied and discussed by other
-    % researchers.
 \end{abstract}
 
 % \tableofcontents
@@ -68,18 +55,18 @@ added to the organ.
 Experts have been studying these details for a long time, and they’ve written
 about different ways to make pipes sound beautiful and harmonious.
 Our goal is to understand how the Ising number -- a special number that helps
-with tuning -- relates to the pipe’s design, how it behaves upon modification of
+with intonation -- relates to the pipe’s design, how it behaves upon modification of
 the airflow, and how we can use this information to:
 \begin{enumerate}
     \item Make the Ising number more accurate.
     \item Include the flow rate in the Ising number.
-    \item Create a model that helps us design pipes before we start tuning them.
+    \item Create a model that helps us design pipes before we start voicing them.
 \end{enumerate}
 
 \section{Action Plan}
 
 % In this Chapter, we discuss different approaches for successfully improving the
-% organ pipe tuning process.
+% organ pipe voicing process.
 % We discuss the project goals and objectives, potential solutions, and the
 % expected outcomes of the project.
 % Subsequently, we present the data available, some challenges and concerns that
@@ -89,14 +76,14 @@ the airflow, and how we can use this information to:
 
 \subsection{Project Goals and Objectives}
 
-The main goal of this project concerns the improvement of the organ pipe tuning
+The main goal of this project concerns the improvement of the organ pipe voicing
 process.
 As the organ pipe design is a complex process, and usually is not a reversible
 process, it is important to ensure that the design of the pipes is done
-correctly; this presents a key constraint for the tuning process.
+correctly; this presents a key constraint for the intonation process.
 The parameters involved are various, which makes learning about this complex
 system a difficult task; the understandinf of these parameters and their
-interactions would facilitate the tuning process.
+interactions would facilitate the harmonisation process.
 
 A particular subgoal of this project is to improve the Ising
 formula~\autocite{1971Ising-1}, which reads
@@ -137,8 +124,8 @@ our best ability:
 \subsection{Available data sources}
 
 The main source of data is provided by the client.
-The data is currently available in a CSV file, and it contains the following
-columns:
+The data is currently available in a \texttt{CSV} file, and it contains the
+following columns:
 \begin{itemize}
     \item \textbf{isBourdon} \textit{boolean} -- Indicates if the pipe is a Bourdon pipe.
     \item \textbf{flueDepth} \textit{float} -- The depth of the flue.
@@ -155,16 +142,11 @@ the blowing pressure, and the jet initial velocity.
 
 \subsection{Methodology}
 
-% We intend to use a combination of semianalytical methods, numerical methods,
-% machine learning techniques, and data analysis techniques to address the
-% questions presented in the previous section.
-
 We intend to employ an integrated approach combining semianalytical methods, numerical methods, machine learning, 
 and advanced statistical techniques to systematically address the client's question regarding optimal organ 
-pipe tuning and intonation. 
+pipe intonation.
 Each method is selected not only for its individual strengths but also for how collectively they can provide 
-a comprehensive understanding and practical solutions to the organ tuning challenge.
-
+a comprehensive understanding and practical solutions to the organ voicing process.
 
 \subsubsection{Semianalytical methods}
 
@@ -175,7 +157,7 @@ derived using the method of separation of variables.
 
 These solutions give the eigenvalues (i.e., the frequencies). 
 The study of these frequencies -- in particular, the fundamental
-frequency -- is important for the tuning process.
+frequency -- is important for the voicing process.
 
 We intend to to explore basic semianalytical methods, such as the method of
 separation of variables, to study the eigenvalues of the wave equation.
@@ -186,7 +168,7 @@ Specifically, our objectives include:
     \item Review known formulas and estimations methods that connect the
         dimensions of the pipe with the harmonic frequencies of the pipe.
     \item Exhaust literature approaches to the Ising formula.
-    \item Confirm that optimal tuning can be achieved by adjusting the
+    \item Confirm that optimal voicing can be achieved by adjusting the
         dimensions of the pipe.
 \end{itemize}
 
