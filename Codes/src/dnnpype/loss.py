@@ -79,6 +79,46 @@ def expLoss(
     return loss
 
 
+def linearLoss(
+    model: nnx.Module,
+    inputs: jnp.ndarray,
+    theta: jnp.ndarray,
+    refValues: jnp.ndarray,
+):
+    """Linear partials + exact Ising number"""
+    # inputs: (isBourdon, flueDepth, frequency, cutUpHeight, diameterToe, acousticIntensity)
+    outputs = model(inputs)
+    computedIsingNumber = _isingNumber(inputs, theta)
+    _, _, frequency, _, _, _ = jnp.split(inputs, 6, axis=1)
+    computedPartials = _linearPartials(frequency, theta)
+    refIsingNumber, refPartials = jnp.split(refValues, 2, axis=1)
+    loss = jnp.mean(
+        jnp.square(computedIsingNumber - refIsingNumber)
+        + jnp.sum(jnp.square(computedPartials - refPartials), axis=1)
+    )
+    return loss
+
+
+def logLoss(
+    model: nnx.Module,
+    inputs: jnp.ndarray,
+    theta: jnp.ndarray,
+    refValues: jnp.ndarray,
+):
+    """Log partials + exact Ising number"""
+    # inputs: (isBourdon, flueDepth, frequency, cutUpHeight, diameterToe, acousticIntensity)
+    outputs = model(inputs)
+    computedIsingNumber = _isingNumber(inputs, theta)
+    _, _, frequency, _, _, _ = jnp.split(inputs, 6, axis=1)
+    computedPartials = _logPartials(frequency, theta)
+    refIsingNumber, refPartials = jnp.split(refValues, 2, axis=1)
+    loss = jnp.mean(
+        jnp.square(computedIsingNumber - refIsingNumber)
+        + jnp.sum(jnp.square(computedPartials - refPartials), axis=1)
+    )
+    return loss
+
+
 ####################################################################################
 # Tests
 ####################################################################################
@@ -93,9 +133,20 @@ if __name__ == "__main__":
     print(_logPartials(fakeFreq, fakeTheta))
 
     # Test the loss function
-    fakeModel = nnx.Linear(6, 10, kernel_init=nnx.initializers.xavier_uniform(), rngs=nnx.Rngs(0))
-    fakeInputs = jnp.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32)
+    fakeModel = nnx.Linear(
+        6, 10, kernel_init=nnx.initializers.xavier_uniform(), rngs=nnx.Rngs(0)
+    )
+    fakeInputs = jnp.array(
+        [[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32
+    )
     fakeTheta = jnp.array([1, 2], dtype=jnp.float32)
     fakeRefValues = jnp.array([[1, 2], [3, 4]], dtype=jnp.float32)
+
     loss = expLoss(fakeModel, fakeInputs, fakeTheta, fakeRefValues)
-    print("Loss:", loss)
+    print("Loss (exp):", loss)
+
+    loss = linearLoss(fakeModel, fakeInputs, fakeTheta, fakeRefValues)
+    print("Loss (linear):", loss)
+
+    loss = logLoss(fakeModel, fakeInputs, fakeTheta, fakeRefValues)
+    print("Loss (log):", loss)
