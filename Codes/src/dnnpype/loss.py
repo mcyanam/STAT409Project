@@ -1,7 +1,6 @@
 """DNNPype/loss.py: Loss functions for DNNPype."""
 
 from __future__ import annotations
-from typing import List
 
 import jax
 import jax.numpy as jnp
@@ -14,9 +13,7 @@ import flax.nnx as nnx
 @jax.jit
 def _isingNumber(x_pipe: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
     """Compute the (batched) Ising number."""
-    isBourdon, flueDepth, frequency, cutUpHeight, diameterToe, acousticIntensity = (
-        jnp.split(x_pipe, 6, axis=1)
-    )
+    _, flueDepth, frequency, cutUpHeight, _, _ = jnp.split(x_pipe, 6, axis=1)
     pressure, density = theta
     isingNumber = (1 / frequency) * jnp.sqrt(
         (2 * pressure * flueDepth) / (density * jnp.power(cutUpHeight, 3))
