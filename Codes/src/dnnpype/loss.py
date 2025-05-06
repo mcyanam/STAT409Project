@@ -33,6 +33,7 @@ def _exponentialPartials(freq: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
     partials = partials / jnp.max(partials, axis=1, keepdims=True)
     return partials
 
+
 @jax.jit
 def _linearPartials(freq: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
     """Compute the (batched) linear partials."""
@@ -42,12 +43,15 @@ def _linearPartials(freq: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
     partials = partials / jnp.max(partials, axis=1, keepdims=True)
     return partials
 
+
 @jax.jit
 def _logPartials(freq: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
     """Compute the (batched) log partials."""
     n_part_from_freq = jnp.expand_dims(freq, axis=1) * jnp.arange(1, 9)
     slope, intercept = jnp.split(theta, 2, axis=-1)
-    partials = jnp.log(jnp.ones_like(n_part_from_freq) + n_part_from_freq * slope) + intercept
+    partials = (
+        jnp.log(jnp.ones_like(n_part_from_freq) + n_part_from_freq * slope) + intercept
+    )
     partials = partials / jnp.max(partials, axis=1, keepdims=True)
     return partials
 
@@ -55,32 +59,29 @@ def _logPartials(freq: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
 ################################################################################
 # Loss functions
 ################################################################################
-def flatIsingLoss(
+def expLoss(
     model: nnx.Module,
     inputs: jnp.ndarray,
+    theta: jnp.ndarray,
+    refValues: jnp.ndarray,
 ):
-    """Flat loss + ideal Ising number
-
-    Assume all ideal partials must be close to 1.
-    Assume Ising number is given from data.
-
-    Args:
-        model: The model to be trained.
-        inputs: The input data.
-    Returns:
-        The loss value.
-    """
-    outputs = model(inputs)
-    # This may not work
-    isingNumber = outputs[:, 0]
-    partials = outputs[:, 1:]
-    # Compute the loss
+    """Flat partials + exact Ising number"""
+    # inputs: (isBourdon, flueDepth, frequency, cutUpHeight, diameterToe, acousticIntensity)
+    outputs = model(inputs)  # (ising, partial1, ..., partial8)
+    computedIsingNumber = _isingNumber(inputs, theta)
+    _, _, frequency, _, _, _ = jnp.split(inputs, 6, axis=1)
+    computedPartials = _exponentialPartials(frequency, theta)
+    refIsingNumber, refPartials = jnp.split(refValues, 2, axis=1)
     loss = jnp.mean(
-        jnp.square(isingNumber - 2) + jnp.sum(jnp.square(partials - 1), axis=1)
+        jnp.square(computedIsingNumber - refIsingNumber)
+        + jnp.sum(jnp.square(computedPartials - refPartials), axis=1)
     )
     return loss
 
 
+####################################################################################
+# Tests
+####################################################################################
 if __name__ == "__main__":
     # Test the loss function
     fakeData = jnp.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32)
@@ -90,3 +91,11 @@ if __name__ == "__main__":
     print(_exponentialPartials(fakeFreq, fakeTheta))
     print(_linearPartials(fakeFreq, fakeTheta))
     print(_logPartials(fakeFreq, fakeTheta))
+
+    # Test the loss function
+    fakeModel = nnx.Linear(6, 10, kernel_init=nnx.initializers.xavier_uniform(), rngs=nnx.Rngs(0))
+    fakeInputs = jnp.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32)
+    fakeTheta = jnp.array([1, 2], dtype=jnp.float32)
+    fakeRefValues = jnp.array([[1, 2], [3, 4]], dtype=jnp.float32)
+    loss = expLoss(fakeModel, fakeInputs, fakeTheta, fakeRefValues)
+    print("Loss:", loss)
