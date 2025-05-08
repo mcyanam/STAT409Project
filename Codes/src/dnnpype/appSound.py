@@ -260,8 +260,9 @@ def _append_rating(
     """Append rating to the output dictionary."""
     output_dict["rating"].append(rating)
     output_dict["partials_type"].append(partials_type)
-    for i in range(len(partials)):
-        output_dict[f"partial{i+1}"].append(partials[i])
+    _partials = partials.tolist()
+    for i, partial in enumerate(_partials):
+        output_dict[f"partial{i+1}"].append(partial)
 
 
 ###############################################################################
@@ -287,16 +288,21 @@ def main() -> None:
         n_samples=args.samples,
         freq=args.frequency,
     )
+    exp_partials = [(p,PartialsTypes.EXPONENTIAL) for p in exp_partials]
+
     lin_partials = _gen_partials(
         partials_type=PartialsTypes.LINEAR,
         n_samples=args.samples,
         freq=args.frequency,
     )
+    lin_partials = [(p,PartialsTypes.LINEAR) for p in lin_partials]
+
     log_partials = _gen_partials(
         partials_type=PartialsTypes.LOG,
         n_samples=args.samples,
         freq=args.frequency,
     )
+    log_partials = [(p,PartialsTypes.LOG) for p in log_partials]
 
     # Shuffle the partials
     partials = exp_partials + lin_partials + log_partials
@@ -329,7 +335,7 @@ def main() -> None:
     }
 
     # Main loop
-    for i, partial_dist in enumerate(partials):
+    for i, (partial_dist, partials_type) in enumerate(partials):
         # Generate soundwave
         sw = sound.sound_from_partials(
             partial_dist,
@@ -352,7 +358,7 @@ def main() -> None:
         _append_rating(
             output_dict=output_dict,
             rating=rating,
-            partials_type=partials[i],
+            partials_type=partials_type,
             partials=partial_dist,
         )
 
@@ -360,7 +366,6 @@ def main() -> None:
     output_df = pl.DataFrame(output_dict)
     output_df.write_csv(
         os.path.join(args.output_dir, f"{args.output}.csv"),
-        has_header=True,
         separator=",",
     )
 
