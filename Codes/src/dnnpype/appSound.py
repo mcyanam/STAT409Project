@@ -4,8 +4,9 @@ from __future__ import annotations
 from typing import Optional, List
 
 import os
-import numpy as np
 import argparse
+import rich as r
+import numpy as np
 import sounddevice as sd
 import scipy.io.wavfile as wav
 
@@ -24,6 +25,13 @@ def _argparse() -> argparse.Namespace:
         type=float,
         default=440.0,
         help="Fundamental frequency of the sound in Hz.",
+        required=True,
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=os.path.join(os.getcwd(), "output"),
+        help="Directory to save the output files.",
         required=True,
     )
     # Optional arguments
@@ -67,6 +75,45 @@ def _argparse() -> argparse.Namespace:
         required=False,
     )
     return parser.parse_args()
+
+
+def _handle_output_dir(
+    *,
+    output_dir: str,
+) -> None:
+    """Create the output directory if it does not exist."""
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        r.print(
+            f"[bold green]Output directory [/bold green]"
+            f"[cyan]{output_dir}[/cyan] "
+            f"[bold green]created.[/bold green]"
+        )
+    else:
+        r.print(
+            f"[bold yellow]Output directory [/bold yellow]"
+            f"[cyan]{output_dir}[/cyan] "
+            f"[bold yellow]already exists.[/bold yellow]"
+        )
+
+
+def _print_args(
+    *,
+    args: argparse.Namespace,
+) -> None:
+    """Print the command line arguments."""
+    r.print(
+        f"[bold blue]Interactive sound generation and rating\n[/bold blue]"
+        f"[bold blue]=======================================\n[/bold blue]"
+        f"[bold]\tBase frequency: [/bold] {args.frequency} Hz\n"
+        f"[bold]\tDuration: [/bold] {args.duration} s\n"
+        f"[bold]\tSample rate: [/bold] {args.samplerate} Hz\n"
+        f"[bold]\tNumber of samples: [/bold] {args.samples}\n"
+        f"[bold]\tOutput directory: [/bold] {args.output_dir}\n"
+        f"[bold]\tOutput summary file: [/bold] {args.output}\n"
+        f"[bold]\tSave samples: [/bold] {args.save_samples}\n"
+        f"[bold blue]=======================================\n\n[/bold blue]"
+    )
 
 
 ###############################################################################
@@ -144,11 +191,13 @@ def _get_user_rating() -> float:
 ###############################################################################
 # Main function
 ###############################################################################
+
+
 def main() -> None:
-    pass
+    """Run with 'classify_samples' command."""
 
 
 if __name__ == "__main__":
     args = _argparse()
-    for arg in vars(args):
-        print(f"{arg}: {vars(args)[arg]}")
+    _handle_output_dir(output_dir=args.output_dir)
+    _print_args(args=args)

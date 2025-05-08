@@ -13,6 +13,8 @@ dependencies = [
     "flax",
     "optax",
     "sounddevice",
+    "rich",
+    "scipy",
 ]
 
 [project.optional-dependencies]
