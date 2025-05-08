@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from typing import Optional, List
+from enum import Enum
 
 import os
 import argparse
@@ -12,6 +13,27 @@ import scipy.io.wavfile as wav
 
 # import .sound as sound
 
+
+###############################################################################
+# Constants, enums, and globas
+###############################################################################
+class PartialsTypes(Enum):
+    """Enum for partials types."""
+
+    EXPONENTIAL = "exponential"
+    LINEAR = "linear"
+    LOG = "log"
+
+    def __str__(self) -> str:
+        return self.value
+
+# Lazy way to avoid magic numbers
+_min_exp: float = 0.0
+_max_exp: float = 1.0
+_min_lin: float = 0.0
+_max_lin: float = 1.0
+_min_log: float = 0.0
+_max_log: float = 1.0
 
 ###############################################################################
 # Auxiliary functions
@@ -163,6 +185,29 @@ def _gen_theta_row(
     """Generate random parameters for exponential partials."""
     return np.random.uniform(min_val, max_val, size=n_samples)
 
+def _gen_partials(
+    *,
+    partials_type: PartialsTypes,
+    n_samples: int,
+    freq: float,
+) -> List[np.ndarray]:
+    """Generate random partials."""
+    if partials_type == PartialsTypes.EXPONENTIAL:
+        theta = _gen_theta_row(n_samples=n_samples, min_val=_min_exp, max_val=_max_exp)
+        partial_gen: Callable = _exponentialPartials
+    elif partials_type == PartialsTypes.LINEAR:
+        theta = _gen_theta_row( n_samples=n_samples, min_val=_min_lin, max_val=_max_lin)
+        partial_gen: Callable = _linearPartials
+    elif partials_type == PartialsTypes.LOG:
+        theta = _gen_theta_row( n_samples=n_samples, min_val=_min_log, max_val=_max_log)
+        partial_gen: Callable = _logPartials
+    else:
+        raise ValueError(f"Unknown partials type: {partials_type}")
+    partials = []
+    for i in range(theta.shape[0]):
+        partials.append(partial_gen(freq=freq, theta=theta[i]))
+    return partials
+
 
 ###############################################################################
 # Handler rating functions
@@ -195,11 +240,12 @@ def _get_user_rating() -> float:
 
 def main() -> None:
     """Run with 'classify_samples' command."""
-
-
-if __name__ == "__main__":
     args = _argparse()
     _handle_output_dir(output_dir=args.output_dir)
     if args.output is None:
         args.output = f"sound_{args.frequency}Hz_{args.duration}s_{args.samplerate}Hz"
     _print_args(args=args)
+
+
+if __name__ == "__main__":
+    main()
