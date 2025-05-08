@@ -10,8 +10,10 @@ import rich as r
 import numpy as np
 import sounddevice as sd
 import scipy.io.wavfile as wav
+import polars as pl
 
-# import .sound as sound
+# local imports
+import sound as sound
 
 
 ###############################################################################
@@ -27,6 +29,7 @@ class PartialsTypes(Enum):
     def __str__(self) -> str:
         return self.value
 
+
 # Lazy way to avoid magic numbers
 _min_exp: float = 0.0
 _max_exp: float = 1.0
@@ -34,6 +37,7 @@ _min_lin: float = 0.0
 _max_lin: float = 1.0
 _min_log: float = 0.0
 _max_log: float = 1.0
+
 
 ###############################################################################
 # Auxiliary functions
@@ -145,9 +149,9 @@ def _exponentialPartials(freq: float, theta: np.ndarray) -> np.ndarray:
     """Compute exponential partials."""
     n_part_from_freq = freq * np.arange(1, 9)
     slicing_idx: list[int] = [1]
-    shift, intercept = np.split(theta, slicing_idx, axis=-1)
+    shift, intercept = np.split(theta, slicing_idx, axis=0)
     partials = np.exp(-n_part_from_freq * intercept) + shift
-    partials = partials / np.max(partials, axis=1, keepdims=True)
+    partials = partials / np.max(partials, axis=0, keepdims=True)
     return partials
 
 
@@ -155,9 +159,9 @@ def _linearPartials(freq: float, theta: np.ndarray) -> np.ndarray:
     """Compute linear partials."""
     n_part_from_freq = freq * np.arange(1, 9)
     slicing_idx: list[int] = [1]
-    slope, intercept = np.split(theta, slicing_idx, axis=-1)
+    slope, intercept = np.split(theta, slicing_idx, axis=0)
     partials = n_part_from_freq * slope + intercept
-    partials = partials / np.max(partials, axis=1, keepdims=True)
+    partials = partials / np.max(partials, axis=0, keepdims=True)
     return partials
 
 
@@ -165,11 +169,11 @@ def _logPartials(freq: float, theta: np.ndarray) -> np.ndarray:
     """Compute log partials."""
     n_part_from_freq = freq * np.arange(1, 9)
     slicing_idx: list[int] = [1]
-    slope, intercept = np.split(theta, slicing_idx, axis=-1)
+    slope, intercept = np.split(theta, slicing_idx, axis=0)
     partials = (
         np.log(np.ones_like(n_part_from_freq) + n_part_from_freq * slope) + intercept
     )
-    partials = partials / np.max(partials, axis=1, keepdims=True)
+    partials = partials / np.max(partials, axis=0, keepdims=True)
     return partials
 
 
@@ -183,7 +187,8 @@ def _gen_theta_row(
     max_val: float,
 ) -> np.ndarray:
     """Generate random parameters for exponential partials."""
-    return np.random.uniform(min_val, max_val, size=n_samples)
+    return np.random.uniform(min_val, max_val, size=(n_samples, 2))
+
 
 def _gen_partials(
     *,
@@ -193,13 +198,25 @@ def _gen_partials(
 ) -> List[np.ndarray]:
     """Generate random partials."""
     if partials_type == PartialsTypes.EXPONENTIAL:
-        theta = _gen_theta_row(n_samples=n_samples, min_val=_min_exp, max_val=_max_exp)
+        theta = _gen_theta_row(
+            n_samples=n_samples,
+            min_val=_min_exp,
+            max_val=_max_exp,
+        )
         partial_gen: Callable = _exponentialPartials
     elif partials_type == PartialsTypes.LINEAR:
-        theta = _gen_theta_row( n_samples=n_samples, min_val=_min_lin, max_val=_max_lin)
+        theta = _gen_theta_row(
+            n_samples=n_samples,
+            min_val=_min_lin,
+            max_val=_max_lin,
+        )
         partial_gen: Callable = _linearPartials
     elif partials_type == PartialsTypes.LOG:
-        theta = _gen_theta_row( n_samples=n_samples, min_val=_min_log, max_val=_max_log)
+        theta = _gen_theta_row(
+            n_samples=n_samples,
+            min_val=_min_log,
+            max_val=_max_log,
+        )
         partial_gen: Callable = _logPartials
     else:
         raise ValueError(f"Unknown partials type: {partials_type}")
@@ -233,6 +250,20 @@ def _get_user_rating() -> float:
     return rating
 
 
+def _append_rating(
+    output_dict: dict,
+    *,
+    rating: float,
+    partials_type: PartialsTypes,
+    partials: np.ndarray,
+) -> None:
+    """Append rating to the output dictionary."""
+    output_dict["rating"].append(rating)
+    output_dict["partials_type"].append(partials_type)
+    for i in range(len(partials)):
+        output_dict[f"partial{i+1}"].append(partials[i])
+
+
 ###############################################################################
 # Main function
 ###############################################################################
@@ -243,8 +274,101 @@ def main() -> None:
     args = _argparse()
     _handle_output_dir(output_dir=args.output_dir)
     if args.output is None:
-        args.output = f"sound_{args.frequency}Hz_{args.duration}s_{args.samplerate}Hz"
+        args.output = (
+            f"sound_{args.frequency}Hz"
+            f"_{args.duration}s_{args.samplerate}Hz_{args.samples}samples"
+        )
+        args.output = args.output.replace(".", "_")
     _print_args(args=args)
+
+    # Generate random partials
+    exp_partials = _gen_partials(
+        partials_type=PartialsTypes.EXPONENTIAL,
+        n_samples=args.samples,
+        freq=args.frequency,
+    )
+    lin_partials = _gen_partials(
+        partials_type=PartialsTypes.LINEAR,
+        n_samples=args.samples,
+        freq=args.frequency,
+    )
+    log_partials = _gen_partials(
+        partials_type=PartialsTypes.LOG,
+        n_samples=args.samples,
+        freq=args.frequency,
+    )
+
+    # Shuffle the partials
+    partials = exp_partials + lin_partials + log_partials
+    np.random.shuffle(partials)
+
+    if args.save_samples:
+        _get_name = (
+            lambda i: f"sample{i}_{args.frequency}Hz_{args.duration}s_{args.samplerate}Hz"
+        )
+        _save_file = lambda x, i: sound.save_file(
+            sound=x,
+            filename=os.path.join(args.output_dir, f"{_get_name(i)}.wav"),
+            samplerate=args.samplerate,
+        )
+    else:
+        _save_file = lambda x, i: None
+
+    # Create a dictionary to store the ratings
+    output_dict = {
+        "rating": [],
+        "partials_type": [],
+        "partial1": [],
+        "partial2": [],
+        "partial3": [],
+        "partial4": [],
+        "partial5": [],
+        "partial6": [],
+        "partial7": [],
+        "partial8": [],
+    }
+
+    # Main loop
+    for i, partial_dist in enumerate(partials):
+        # Generate soundwave
+        sw = sound.sound_from_partials(
+            partial_dist,
+            base_frequency=args.frequency,
+            samplerate=args.samplerate,
+            duration=args.duration,
+        )
+        sw = sw / np.max(np.abs(sw))  # Normalize soundwave
+
+        # Play sound
+        _play_sound(sound=sw, samplerate=args.samplerate)
+
+        # Get user rating
+        rating = _get_user_rating()
+
+        # Save sound to file
+        _save_file(sw, i)
+
+        # Append rating to the output dictionary
+        _append_rating(
+            output_dict=output_dict,
+            rating=rating,
+            partials_type=partials[i],
+            partials=partial_dist,
+        )
+
+    # Save the output dictionary to a CSV file
+    output_df = pl.DataFrame(output_dict)
+    output_df.write_csv(
+        os.path.join(args.output_dir, f"{args.output}.csv"),
+        has_header=True,
+        separator=",",
+    )
+
+    r.print(
+        f"[bold green]Output file [/bold green]"
+        f"[cyan]{args.output}.csv[/cyan] "
+        f"[bold green]saved.[/bold green]"
+    )
 
 
 if __name__ == "__main__":

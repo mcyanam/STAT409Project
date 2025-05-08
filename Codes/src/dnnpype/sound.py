@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import jax
 import numpy as np
 import scipy.io.wavfile as wav
 
