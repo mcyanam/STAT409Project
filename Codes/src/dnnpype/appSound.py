@@ -62,7 +62,7 @@ def _argparse() -> argparse.Namespace:
     )
     parser.add_argument(
         "--output",
-        type=Optional[str],
+        type=str,
         help=_str_out,
         default=None,
         required=False,
@@ -200,4 +200,6 @@ def main() -> None:
 if __name__ == "__main__":
     args = _argparse()
     _handle_output_dir(output_dir=args.output_dir)
+    if args.output is None:
+        args.output = f"sound_{args.frequency}Hz_{args.duration}s_{args.samplerate}Hz"
     _print_args(args=args)
