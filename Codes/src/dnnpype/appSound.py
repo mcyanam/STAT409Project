@@ -59,6 +59,13 @@ def _argparse() -> argparse.Namespace:
         default=None,
         required=False,
     )
+    parser.add_argument(
+        "--save-samples",
+        action="store_true",
+        help="Save wav files of the generated samples.",
+        default=False,
+        required=False,
+    )
     return parser.parse_args()
 
 
@@ -108,6 +115,30 @@ def _gen_theta_row(
 ) -> np.ndarray:
     """Generate random parameters for exponential partials."""
     return np.random.uniform(min_val, max_val, size=n_samples)
+
+
+###############################################################################
+# Handler rating functions
+###############################################################################
+def _play_sound(
+    *,
+    sound: np.ndarray,
+    samplerate: int,
+) -> None:
+    """Play sound using sounddevice."""
+    sd.play(sound, samplerate)
+    sd.wait()
+
+
+def _get_user_rating() -> float:
+    """Get user rating for the sound."""
+    rating: float = -1.0
+    while rating < 0.0 or rating > 1.0:
+        try:
+            rating = float(input("Rate the sound (0-1): "))
+        except ValueError:
+            print("Invalid input. Please enter a number between 0 and 1.")
+    return rating
 
 
 ###############################################################################

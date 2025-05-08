@@ -22,7 +22,7 @@ def sound_from_partials(
     Inputs
     ------
     partials: numpy.ndarray
-        The partials to generate sound from.
+        The partials (distribution) to generate sound from.
     base_frequency: float
         The base frequency of the sound.
     samplerate: int
