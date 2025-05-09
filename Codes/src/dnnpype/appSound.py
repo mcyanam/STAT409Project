@@ -181,7 +181,7 @@ def _logPartials(freq: float, theta: np.ndarray) -> np.ndarray:
     """Compute log partials."""
     slicing_idx: list[int] = [1]
     mult, shift = np.split(theta, slicing_idx, axis=0)
-    _fun = lambda x: np.log(9 - x)*(1 + shift[0]) + np.log(freq * mult)
+    _fun = lambda x: np.log(9 - x) * (1 + shift[0]) + np.log(freq * mult)
     partials = np.array([_fun(i) for i in range(1, 9)]).flatten()
     partials = partials / np.max(partials, axis=0, keepdims=True)
     return partials
