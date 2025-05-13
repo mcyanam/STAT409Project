@@ -32,3 +32,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/dnnpype"]
+
+[tool.black]
+line-length = 79

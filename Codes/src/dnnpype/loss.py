@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import jax
 import jax.numpy as jnp
 import flax.nnx as nnx
 
@@ -50,7 +49,8 @@ def _logPartials(freq: jnp.ndarray, theta: jnp.ndarray) -> jnp.ndarray:
     slicing_idx: list[int] = [1]
     slope, intercept = jnp.split(theta, slicing_idx, axis=-1)
     partials = (
-        jnp.log(jnp.ones_like(n_part_from_freq) + n_part_from_freq * slope) + intercept
+        jnp.log(jnp.ones_like(n_part_from_freq) + n_part_from_freq * slope)
+        + intercept
     )
     partials = partials / jnp.max(partials, axis=1, keepdims=True)
     return partials
@@ -133,7 +133,9 @@ def logLoss(
 ####################################################################################
 if __name__ == "__main__":
     # Test the loss function
-    fakeData = jnp.array([[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32)
+    fakeData = jnp.array(
+        [[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32
+    )
     fakeTheta = jnp.array([1, 2], dtype=jnp.float32)
     print(_isingNumber(fakeData, fakeTheta))
     fakeFreq = jnp.array([1, 2, 3, 4, 5, 6], dtype=jnp.float32)
