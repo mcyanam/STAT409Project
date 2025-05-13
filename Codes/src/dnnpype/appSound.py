@@ -1,7 +1,7 @@
 """DNNPype/appSound.py: Driver for sound synthesis with Scipy."""
 
 from __future__ import annotations
-from typing import Optional, List, Callable, Tuple
+from typing import List, Callable
 from enum import Enum
 
 import os

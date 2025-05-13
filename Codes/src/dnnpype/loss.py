@@ -70,9 +70,6 @@ def expLoss(
     computedIsingNumber, computedPartials = jnp.split(
         computedResults, slicing_idx, axis=1
     )
-    print(
-        f"{computedPartials.shape=}, {computedIsingNumber.shape=}, {computedResults.shape=}"
-    )
     _, _, frequency, _, _, _ = jnp.split(inputs, 6, axis=1)
     refIsingNumber = _isingNumber(inputs, theta)
     refPartials = _exponentialPartials(frequency, theta)
@@ -128,6 +125,26 @@ def logLoss(
     return loss
 
 
+def refLoss(
+    model: nnx.Module,
+    inputs: jnp.ndarray,
+    theta: jnp.ndarray,
+    refPartials: jnp.ndarray,
+):
+    """Reference loss function for testing"""
+    computedResults = model(inputs)  # (ising, partial1, ..., partial8)
+    slicing_idx: list[int] = [1]
+    computedIsingNumber, computedPartials = jnp.split(
+        computedResults, slicing_idx, axis=1
+    )
+    refIsingNumber = _isingNumber(inputs, theta)
+    loss = jnp.mean(
+        jnp.square(computedIsingNumber - refIsingNumber)
+        + jnp.sum(jnp.square(computedPartials - refPartials), axis=1)
+    )
+    return loss
+
+
 ####################################################################################
 # Tests
 ####################################################################################
@@ -150,7 +167,12 @@ if __name__ == "__main__":
     fakeInputs = jnp.array(
         [[1, 2, 3, 4, 5, 6], [7, 8, 9, 10, 11, 12]], dtype=jnp.float32
     )
+    fakePartials = jnp.array(
+        [[1, 2, 3, 4, 5, 6, 7, 8], [9, 10, 11, 12, 13, 14, 15, 16]],
+        dtype=jnp.float32,
+    )
     fakeTheta = jnp.array([1, 2], dtype=jnp.float32)
     print(expLoss(fakeModel, fakeInputs, fakeTheta))
     print(linearLoss(fakeModel, fakeInputs, fakeTheta))
     print(logLoss(fakeModel, fakeInputs, fakeTheta))
+    print(refLoss(fakeModel, fakeInputs, fakeTheta, fakePartials))
