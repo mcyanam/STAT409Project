@@ -1,7 +1,7 @@
 """DNNPype/opt.py: Wrapper loops and utilities for training and evaluation."""
 
 from __future__ import annotations
-from typing import Callable, Dict, Tuple, Optional, Any
+from typing import Callable, Dict, Tuple, Any
 
 import jax
 import jax.numpy as jnp

@@ -9,7 +9,6 @@ import argparse
 import rich as r
 import numpy as np
 import sounddevice as sd
-import scipy.io.wavfile as wav
 import polars as pl
 import plotly.graph_objects as go
 
@@ -49,7 +48,11 @@ _add: dict[str, tuple[float, float]] = {
 ###############################################################################
 def _argparse() -> argparse.Namespace:
     """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description="Sound synthesis with Scipy.")
+    _dsc: str = (
+        "DNNPype: Interactive sound generation and rating.\n"
+        "Generate sound samples using different partials distributions.\n"
+    )
+    parser = argparse.ArgumentParser(description=_dsc)
     # Required arguments
     parser.add_argument(
         "--frequency",
@@ -294,8 +297,6 @@ def _append_rating(
 ###############################################################################
 # Main function
 ###############################################################################
-
-
 def main() -> None:
     """Run with 'classify_samples' command."""
     args = _argparse()
