@@ -3,7 +3,6 @@
 from __future__ import annotations
 from typing import Callable, Dict, Tuple, Any
 
-import jax
 import jax.numpy as jnp
 import flax.nnx as nnx
 import optax
@@ -31,18 +30,18 @@ def get_optimizer(
         Tuple[nnx.Optimizer, Callable]: A tuple containing the initialized optimizer and its update function.
     """
     if "learning_rate" not in kwargs:
-        kwargs["learning_rate"] = (
-            _DEFAULT_LR  # Use default learning rate if not provided
-        )
+        kwargs.setdefault("learning_rate", _DEFAULT_LR)
     return nnx.Optimizer(model, optax_optimizer(**kwargs))
 
 
 def train(
     model: nnx.Module,
     optimizer: nnx.Optimizer,
-    metrics: nnx.MultiMetrics,
-    train_dataset: Dict[str, jnp.ndarray],
-    loss_fn: Callable[[nnx.Module, Dict[str, jnp.ndarray]], Tuple[float, Any]],
+    metrics: nnx.MultiMetric,
+    train_data: jnp.ndarray,
+    expected_data: jnp.ndarray,
+    param: jnp.ndarray,
+    loss_fn: Callable[..., Tuple[float, Any]],
     epochs: int = 10,
     batch_size: int = 32,
 ) -> None:
@@ -53,12 +52,14 @@ def train(
         model (nnx.Module): The model to train.
         optimizer (nnx.Optimizer): The optimizer used for training.
         metrics (nnx.MultiMetrics): Metrics object to track training performance.
-        train_dataset (Dict[str, jnp.ndarray]): The training dataset as a dictionary of features and labels.
+        train_data (jnp.ndarray): The training dataset as a jnp.ndarray.
+        expected_data (jnp.ndarray): The expected outputs as a jnp.ndarray.
+        param (jnp.ndarray): The parameters for the model.
         loss_fn (Callable): The loss function to compute gradients.
         epochs (int, optional): The number of epochs to train for. Defaults to 10.
         batch_size (int, optional): The batch size for training. Defaults to 32.
     """
-    num_samples = train_dataset["data"].shape[0]
+    num_samples = train_data.shape[0]
     num_batches = num_samples // batch_size
 
     for epoch in range(epochs):
@@ -66,27 +67,26 @@ def train(
         for batch_idx in range(num_batches):
             # Extract batch data
             start_idx = batch_idx * batch_size
-            end_idx = start_idx + batch_size
-            batch = {
-                key: value[start_idx:end_idx]
-                for key, value in train_dataset.items()
-            }
+            end_idx = min(start_idx + batch_size, num_samples)
+            batch = train_data[start_idx:end_idx]
+            expected = expected_data[start_idx:end_idx]
 
             # Compute gradients and update model
-            grad = jax.value_and_grad(loss_fn, has_aux=True)
-            (loss, logits), grads = grad(model, batch)
-            metrics.update(loss=loss, logits=logits, labels=batch["label"])
-            optimizer.update(grads)
+            grad = nnx.value_and_grad(loss_fn, has_aux=True, argnums=(0,))
+            (loss, logits), grads = grad(model, batch, expected, param)
+            # metrics.update(loss=loss, logits=logits, labels=expected)
+            print(f"shape: {batch.shape}, loss: {loss}, logits: {logits}, grads: {grads}")
+            optimizer.update(grads, model)
 
         # Compute and print epoch metrics
-        epoch_metrics = metrics.compute()
-        print(f"Epoch {epoch + 1} Metrics: {epoch_metrics}")
-        metrics.reset()  # Reset metrics for the next epoch
+        # epoch_metrics = metrics.compute()
+        # print(f"Epoch {epoch + 1} Metrics: {epoch_metrics}")
+        # metrics.reset()  # Reset metrics for the next epoch
 
 
 def evaluate(
     model: nnx.Module,
-    metrics: nnx.MultiMetrics,
+    metrics: nnx.MultiMetric,
     eval_dataset: Dict[str, jnp.ndarray],
     batch_size: int = 32,
 ) -> None:

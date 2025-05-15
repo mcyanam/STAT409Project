@@ -15,7 +15,7 @@
     ItalicFont=*-Italic,
 ]
 
-\title{Organ tuning consulting}
+\title{Organ voicing and flow-informed Ising number}
 \subtitle{Team C -- CADES Lab}
 \author[Cyanam, Nguyen, Pinochet-Soto]{Meghana Cyanam \and Hai Nguyen \and Gabriel Pinochet-Soto}
 \institute{Portland State University}
@@ -39,23 +39,20 @@
 	\begin{frame}
         \frametitle{Introduction: What is organ tuning?}
 		\begin{itemize}
-            \item<1->
+            \item
                 Pipe organs have been around for hundreds of years, and making them sound just
                 right is a special job called intonation, or \emph{voicing}.
 
-			\item<2->
+			\item
                 The way a pipe looks and is built -- like its size, shape, and material-- can
                 change how it sounds.
 
-			\item<3->
+			\item
                 These details are decided first, and then the pipes are fine-tuned before being
                 added to the organ.
 		\end{itemize}
 	\end{frame}
 
-% isBourdon,flueDepth,frequency,cutUpHeight,diameterToe,acousticIntensity,partial1,partial2,partial3,partial4,partial5,partial6,partial7,partial8
-% 0,1.10E-03,110.00,1.70E-02,8.00E-03,68.00,99.00,97.00,97.00,81.00,64.00,45.00,30.00,12.00 is Good
-% 0,1.10E-03,174.60,1.00E-02,1.10E-02,111.00,34.00,99.00,17.00,11.00,59.00,28.00,0.00,32.00 is Bad
     \subsection{Good vs. bad voicing}
     \begin{frame}
         \frametitle{Introduction: Good vs. bad voicing}
@@ -142,11 +139,171 @@
     \begin{frame}
         \frametitle{Action Plan}
         \begin{enumerate}
-            \item<1-> Semianalytical methods
-            \item<2-> FEM simulations
-            \item<3-> Machine learning (DNN) on JAX
-            \item<4-> Generalized Additive Models (GAM)
-            \item<5-> \emph{We are open to ideas!}
+            \item Semianalytical methods
+            \item FEM simulations
+            \item Machine learning (DNN) on JAX
+            \item Generalized Additive Models (GAM)
         \end{enumerate}
+    \end{frame}
+
+    \section{Preliminary analysis}
+    \begin{frame}
+        \frametitle{Preliminary analysis: state of the data}
+                \centering
+                \begin{figure}[htbp]
+                    \includegraphics[width=0.9\textwidth]{pic1.png}
+                    \caption{Initial state of the data}
+                    \label{fig:initial_state}
+                \end{figure}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Preliminary analysis: state of the data}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{alertblock}{Initial state of the data}
+                    \begin{itemize}
+                        \item Redundant information \(\to\) remove constants,
+                            known values.
+                        \item Data is scarse \(\to\) small number of parameters.
+                    \end{itemize}
+                \end{alertblock}
+                \begin{block}{Data}
+                    \begin{itemize}
+                        \item Convert to \texttt{.csv} format.
+                        \item Pre-compute known values.
+                        \item Define formulae for the Ising number.
+                    \end{itemize}
+                \end{block}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{block}{Main objectives}
+                    \begin{itemize}
+                        \item Check the distribution of the partials.
+                        \item Check for correlations.
+                        \item Attempt simple corrections.
+                        \item Attempt more complex modeling.
+                    \end{itemize}
+                \end{block}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \centering
+        \begin{figure}[htbp]
+            \includegraphics[width=0.8\textwidth]{pic2.png}
+            \caption{Correlation matrix}
+            \label{fig:distribution_partials}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Basic corrections}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \begin{alertblock}{Correlation matrix}
+                    \begin{itemize}
+                        \item Natural correlation between fundamental frequency
+                            and dimensioning of the pipe.
+                        \item Lack of observations hinders the analysis.
+                    \end{itemize}
+                \end{alertblock}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{block}{Direct-naive correction}
+                    Include linear term in the Ising number:
+                    \[
+                        \hat{\mathsf{I}} =
+                        \mathsf{I}\left(1 + \frac{\mathsf{S}}{2}\right).
+                    \]
+
+                    \emph{Use Bernoulli's Law to justify the correction from
+                    the physics.}
+                \end{block}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Deep neural network approach}
+        \begin{alertblock}{Deep neural network?}
+             \begin{itemize}
+                 \item Few data points \(\to\) tall v/s wide DNN.
+                 \item Loss function \(\to\) mean squared error + Ising
+                     number.
+                 \item Requires \(\sigma(p, \mathsf{I}) = (\operatorname{softmax}(p), \operatorname{softplus}(I))\).
+             \end{itemize}
+        \end{alertblock}
+        \begin{block}{Structure}
+            \begin{itemize}
+                \item Input layer: 8 inputs.
+                \item Hidden layers: \(n_h\) hidden layers with \(n_N\) neurons.
+                \item Output layer: Ising number + first 8 partial intensities,
+                    as mentioned earlier.
+                \item Activation function: ReLU.
+            \end{itemize}
+        \end{block}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Deep neural network approach}
+        \begin{block}{Training}
+            \begin{itemize}
+                \item Train\footnote{
+                    We use \texttt{JAX/Flax/Optax} for the training.}
+                    the model with 80\% of the data.
+                \item Validate the model with 20\% of the data.
+                \item Use Adam optimizer.
+                \item Use a learning rate of \(10^{-3}\).
+            \end{itemize}
+        \end{block}
+
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Deep neural network approach: Loss function}
+        \begin{multline*}
+            \mathcal{L}(m; \theta) =
+            \sum_i \left\{
+            \left(
+                \mathsf{DNN}(m; \theta)(x_i)(\mathsf{I}) 
+                - \mathsf{I}(x_i; \theta)
+            \right)^2 \right.
+            \\
+            +
+            \left.
+            \left\lVert
+                \mathsf{DNN}(m; \theta)(x_i)(p) - p_i
+            \right\rVert_8^2
+            \right\}
+        \end{multline*}
+        \begin{itemize}
+            \item \(\mathsf{DNN}(m; \theta)\) is the DNN model.
+            \item \(x_i\in \mathbb{R}^6\) is the input data:
+                \texttt{isBourdon}, \texttt{flueDepth}, \texttt{frequency},
+                \texttt{cutupHeight}, \texttt{diameterToe}, \texttt{acousticIntensity}.
+            \item \(p_i\) is the output data (partial intensities).
+            \item \(\mathsf{I}\) is the Ising number.
+            \item \(\theta\) is the set of parameters (air pressure, air density).
+        \end{itemize}
+        \begin{block}{Extra}
+            We have a sound simulation app, with user-labeling...
+        \end{block}
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Generalized additive model}
+        \begin{block}{Generalized additive model}
+            \begin{itemize}
+                \item GAM is a generalization of the linear model.
+                \item It allows for non-linear relationships between the
+                    predictors and the response.
+                \item It is a flexible and interpretable model.
+            \end{itemize}
+        \end{block}
+        \begin{block}{Display}
+            To be shown interactively...
+        \end{block}
     \end{frame}
 \end{document}
