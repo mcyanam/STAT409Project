@@ -1,21 +1,18 @@
 """DNNPype/appDNN.py: Wrapper for DNNPype to run the model."""
 
 from __future__ import annotations
-from typing import Optional, Dict, Any
-from enum import Enum
+from typing import Tuple
 
 import os
 import argparse
 import rich as r
-import numpy as np
-import sounddevice as sd
 import polars as pl
-import plotly.graph_objects as go
 
 import jax
 import jax.numpy as jnp
 import flax.nnx as nnx
 import optax
+from functools import partial
 
 import model
 import loss
@@ -26,6 +23,8 @@ import opt
 # Defaults and constants # TODO: Use a toml
 ###############################################################################
 _lr: float = 0.01
+_n_epochs: int = 100
+_n_batches: int = 10
 
 
 ###############################################################################
@@ -44,12 +43,13 @@ def _argsparse() -> argparse.Namespace:
         help="Train the model",
         default=False,
     )
-    parser.add_argument(
-        "--predict",
-        action="store_true",
-        help="Predict the model",
-        default=False,
-    )
+    # TODO: Add predict option
+    # parser.add_argument(
+    #     "--predict",
+    #     action="store_true",
+    #     help="Predict the model",
+    #     default=False,
+    # )
     parser.add_argument(
         "--save",
         action="store_true",
@@ -93,7 +93,7 @@ def _print_args(
         f"[bold blue]DNNPype - DNN-based Ising number prediction\n[/bold blue]"
         f"[bold blue]===========================================\n[/bold blue]"
         f"[bold]\tTrain: [/bold] {args.train}\n"
-        f"[bold]\tPredict: [/bold] {args.predict}\n"
+        # f"[bold]\tPredict: [/bold] {args.predict}\n"
         f"[bold]\tSave: [/bold] {args.save}\n"
         # f"[bold]\tLoad: [/bold] {args.load}\n"
         f"[bold]\tNumber of hidden layers: [/bold] {args.n_hidden}\n"
@@ -105,13 +105,31 @@ def _print_args(
 ###############################################################################
 # Data loading functions
 ###############################################################################
-def _load_data() -> pl.DataFrame:
+def _load_data() -> Tuple[jnp.ndarray, jnp.ndarray]:
     """Load the data from the given path."""
-    pass
+    # TODO: Hardcode the path
+    path = "../../../Data/allOrgan.csv"
+    df = pl.read_csv(path)
+    input_cols = [
+        "isBourdon",
+        "flueDepth",
+        "frequency",
+        "cutUpHeight",
+        "diameterToe",
+        "acousticIntensity",
+    ]
+    output_cols = [f"partial{i}" for i in range(1, 9)]
+    inputs = df.select(input_cols).to_numpy()
+    outputs = df.select(output_cols).to_numpy()
+    inputs = jnp.array(inputs)
+    outputs = jnp.array(outputs)
+    return inputs, outputs
+
 
 def _load_model() -> nnx.Module:
     """Load the model from the given path."""
     pass
+
 
 ###############################################################################
 # Main function
@@ -128,9 +146,6 @@ def main() -> None:
         dim_hidden=args.dim_hidden,
         rngs=rngs,
     )
-
-    # Set up loss function
-    loss_fn = loss.refLoss  # takes model, inputs, theta, refPartials
 
     # Set up optimizer
     optimizer = opt.get_optimizer(
