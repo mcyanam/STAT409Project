@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import jax
 import jax.numpy as jnp
 import flax.nnx as nnx
 
@@ -176,3 +177,15 @@ if __name__ == "__main__":
     print(linearLoss(fakeModel, fakeInputs, fakeTheta))
     print(logLoss(fakeModel, fakeInputs, fakeTheta))
     print(refLoss(fakeModel, fakeInputs, fakeTheta, fakePartials))
+
+    # Differentiate the loss function
+
+    grad_expLoss = jax.grad(expLoss, argnums=1)
+    grad_linearLoss = jax.grad(linearLoss, argnums=1)
+    grad_logLoss = jax.grad(logLoss, argnums=1)
+    grad_refLoss = jax.grad(refLoss, argnums=1)
+
+    print(grad_expLoss(fakeModel, fakeInputs, fakeTheta))
+    print(grad_linearLoss(fakeModel, fakeInputs, fakeTheta))
+    print(grad_logLoss(fakeModel, fakeInputs, fakeTheta))
+    print(grad_refLoss(fakeModel, fakeInputs, fakeTheta, fakePartials))
