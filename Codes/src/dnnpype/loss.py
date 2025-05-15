@@ -129,8 +129,8 @@ def logLoss(
 def refLoss(
     model: nnx.Module,
     inputs: jnp.ndarray,
-    theta: jnp.ndarray,
     refPartials: jnp.ndarray,
+    theta: jnp.ndarray,
 ):
     """Reference loss function for testing"""
     computedResults = model(inputs)  # (ising, partial1, ..., partial8)
@@ -143,7 +143,7 @@ def refLoss(
         jnp.square(computedIsingNumber - refIsingNumber)
         + jnp.sum(jnp.square(computedPartials - refPartials), axis=1)
     )
-    return loss
+    return loss, computedResults
 
 
 ####################################################################################

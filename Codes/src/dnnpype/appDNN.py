@@ -8,7 +8,6 @@ import argparse
 import rich as r
 import polars as pl
 
-import jax
 import jax.numpy as jnp
 import flax.nnx as nnx
 import optax
@@ -139,6 +138,10 @@ def main() -> None:
     args = _argsparse()
     _print_args(args=args)
 
+    # Load the data
+    inputs, outputs = _load_data()
+    theta = jnp.array([0.5, 0.5])  # pressure and density of air
+
     # Set up the model
     rngs = nnx.Rngs(args.seed)
     dnn = model.SmallDNN(
@@ -153,6 +156,30 @@ def main() -> None:
         optax_optimizer=optax.adam,
         learning_rate=_lr,
     )
+
+    # Set up loss function
+    loss_fn = loss.refLoss
+
+    # Set up metrics
+    metrics = nnx.MultiMetric(
+        accuracy=nnx.metrics.Accuracy(),
+        loss=nnx.metrics.Average(),
+    )
+
+    # Train the model
+    if args.train:
+        opt.train(
+            model=dnn,
+            optimizer=optimizer,
+            metrics=metrics,
+            train_data=inputs,
+            expected_data=outputs,
+            param=theta,
+            loss_fn=loss_fn,
+            epochs=_n_epochs,
+            batch_size=_n_batches,
+        )
+
 
 
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 from typing import Callable, Dict, Tuple, Any
 
-import jax
 import jax.numpy as jnp
 import flax.nnx as nnx
 import optax
@@ -40,7 +39,9 @@ def train(
     optimizer: nnx.Optimizer,
     metrics: nnx.MultiMetric,
     train_data: jnp.ndarray,
-    loss_fn: Callable[[nnx.Module, Dict[str, jnp.ndarray]], Tuple[float, Any]],
+    expected_data: jnp.ndarray,
+    param: jnp.ndarray,
+    loss_fn: Callable[..., Tuple[float, Any]],
     epochs: int = 10,
     batch_size: int = 32,
 ) -> None:
@@ -52,6 +53,8 @@ def train(
         optimizer (nnx.Optimizer): The optimizer used for training.
         metrics (nnx.MultiMetrics): Metrics object to track training performance.
         train_data (jnp.ndarray): The training dataset as a jnp.ndarray.
+        expected_data (jnp.ndarray): The expected outputs as a jnp.ndarray.
+        param (jnp.ndarray): The parameters for the model.
         loss_fn (Callable): The loss function to compute gradients.
         epochs (int, optional): The number of epochs to train for. Defaults to 10.
         batch_size (int, optional): The batch size for training. Defaults to 32.
@@ -64,19 +67,21 @@ def train(
         for batch_idx in range(num_batches):
             # Extract batch data
             start_idx = batch_idx * batch_size
-            end_idx = start_idx + batch_size
-            end_idx = min(end_idx, num_samples)
+            end_idx = min(start_idx + batch_size, num_samples)
             batch = train_data[start_idx:end_idx]
+            expected = expected_data[start_idx:end_idx]
+
             # Compute gradients and update model
-            grad = jax.value_and_grad(loss_fn, has_aux=True)
-            (loss, logits), grads = grad(model, batch)
-            metrics.update(loss=loss, logits=logits, labels=batch["label"])
-            optimizer.update(grads)
+            grad = nnx.value_and_grad(loss_fn, has_aux=True, argnums=(0,))
+            (loss, logits), grads = grad(model, batch, expected, param)
+            # metrics.update(loss=loss, logits=logits, labels=expected)
+            print(f"shape: {batch.shape}, loss: {loss}, logits: {logits}, grads: {grads}")
+            optimizer.update(grads, model)
 
         # Compute and print epoch metrics
-        epoch_metrics = metrics.compute()
-        print(f"Epoch {epoch + 1} Metrics: {epoch_metrics}")
-        metrics.reset()  # Reset metrics for the next epoch
+        # epoch_metrics = metrics.compute()
+        # print(f"Epoch {epoch + 1} Metrics: {epoch_metrics}")
+        # metrics.reset()  # Reset metrics for the next epoch
 
 
 def evaluate(
